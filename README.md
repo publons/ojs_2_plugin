@@ -1,6 +1,8 @@
-# OJS Publons Plugin
+# OJS 2  Publons Plugin
 
-Version: 2.0
+FOr OJS 3 Plugin please go to https://github.com/publons/ojs_3
+
+Version: 2.0.3
 
 Developed and maintained by: Publons Ltd.
 
@@ -15,7 +17,7 @@ This plugin is licensed under the GNU General Public License v3.
 See the accompanying OJS file docs/COPYING for the complete terms of this license.
 
 ### System Requirements
-- OJS 2.4.5 or greater (Not working on OJS 3.0 yet).
+- OJS 2.4.5 or greater.
 - PHP 5.6.*
 - CURL support for PHP.
 - ZipArchive support for PHP.
@@ -55,3 +57,4 @@ Original version written by Natalya Mollecker for the Media Sphera Publishing Ho
 - 2.0 - Refactor of how plugin works, large bugfixes, styling changes.
 - 2.0.1 - Reviews without content will now be sent to publons
 - 2.0.2 - API token retrieval with password's that have special characters bugfix.
+- 2.0.3 - Fix datetime reviewed date export value and added in abstract export.

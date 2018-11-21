@@ -1,6 +1,6 @@
-# OJS3 Publons Plugin
+# OJS Publons Plugin
 
-For OJS 2 Plugin please visit https://github.com/publons/ojs
+Publons plugin for OJS 3.x. (The 2.x version is in the ojs-stable-2_4_8 branch.)
 
 Version: 1.0
 

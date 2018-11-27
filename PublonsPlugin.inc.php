@@ -131,7 +131,7 @@ class PublonsPlugin extends GenericPlugin {
         $journal =& Request::getJournal();
         switch ($request->getUserVar('verb')) {
             case 'connect':
-                $this->import('classes.form.publonsSettingsForm');
+                $this->import('classes.form.PublonsSettingsForm');
                 $form = new PublonsSettingsForm($this, $journal->getId());
                 if ($request->getUserVar('save')) {
                     $form->readInputData();

@@ -79,7 +79,7 @@ class PublonsSettingsForm extends Form {
             CURLOPT_POST => true,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_URL => $url,
-            CURLOPT_POSTFIELDS =>  'username='.$this->getData('username').'&password='.$this->getData('password')
+            CURLOPT_POSTFIELDS =>  array('username' => $this->getData('username'), 'password' => $this->getData('password'))
         );
 
         $curl = curl_init();

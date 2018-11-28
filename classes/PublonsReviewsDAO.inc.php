@@ -21,14 +21,14 @@ class PublonsReviewsDAO extends DAO {
      * @param $publonsReviewsId int
      * @return PublonsReviews
      */
-    function &getPublonsReviews($publonsReviewsId) {
-        $result =& $this->retrieve(
+    function getPublonsReviews($publonsReviewsId) {
+        $result = $this->retrieve(
             'SELECT * FROM publons_reviews WHERE publons_reviews_id = ?', $publonsReviewsId
         );
 
         $returner = null;
         if ($result->RecordCount() != 0) {
-            $returner =& $this->_returnPublonsReviewsFromRow($result->GetRowAssoc(false));
+            $returner = $this->_returnPublonsReviewsFromRow($result->GetRowAssoc(false));
         }
         $result->Close();
         return $returner;
@@ -47,8 +47,8 @@ class PublonsReviewsDAO extends DAO {
      * @param $row array
      * @return PublonsReviews
     */
-    function &_returnPublonsReviewsFromRow(&$row) {
-        $publonsPlugin =& PluginRegistry::getPlugin('generic', $this->parentPluginName);
+    function _returnPublonsReviewsFromRow($row) {
+        $publonsPlugin = PluginRegistry::getPlugin('generic', $this->parentPluginName);
 
         $publonsReviews = new PublonsReviews();
         $publonsReviews->setId($row['publons_reviews_id']);
@@ -69,7 +69,7 @@ class PublonsReviewsDAO extends DAO {
      * @param $publonsReviews PublonsReviews
      * @return int
      */
-    function insertObject(&$publonsReviews) {
+    function insertObject($publonsReviews) {
         $ret = $this->update(
             sprintf('
                 INSERT INTO publons_reviews
@@ -101,7 +101,7 @@ class PublonsReviewsDAO extends DAO {
      * Update the localized settings for this object
      * @param $referral object
      */
-    function updateLocaleFields(&$publonsReviews) {
+    function updateLocaleFields($publonsReviews) {
         $this->updateDataObjectSettings('publons_reviews_settings', $publonsReviews, array(
             'publons_reviews_id' => $publonsReviews->getId()
         ));
@@ -112,7 +112,7 @@ class PublonsReviewsDAO extends DAO {
      * @param $publonsReviews PublonsReviews object
      * @return boolean
      */
-    function updateObject(&$publonsReviews) {
+    function updateObject($publonsReviews) {
         $returner = $this->update(
             sprintf('UPDATE publons_reviews
                 SET journal_id = ?,
@@ -175,7 +175,7 @@ class PublonsReviewsDAO extends DAO {
      */
     function getPublonsReviewsIdByArticle($journalId, $submissionId, $reviewerId) {
 
-        $result =& $this->retrieve(
+        $result = $this->retrieve(
             'SELECT publons_reviews_id
                 FROM publons_reviews
                 WHERE submission_id = ?
@@ -203,7 +203,7 @@ class PublonsReviewsDAO extends DAO {
      */
     function getPublonsReviewsIdByReviewId($reviewId) {
 
-        $result =& $this->retrieve(
+        $result = $this->retrieve(
             'SELECT publons_reviews_id
                 FROM publons_reviews
                 WHERE review_id = ?',
@@ -226,8 +226,8 @@ class PublonsReviewsDAO extends DAO {
      * @param $journalId int
      * @return object DAOResultFactory containing matching PublonsReviews
      */
-    function &getPublonsReviewsByJournal($journalId, $rangeInfo = null, $sort) {
-        $result =& $this->retrieveRange(
+    function getPublonsReviewsByJournal($journalId, $rangeInfo = null, $sort) {
+        $result = $this->retrieveRange(
             "SELECT *
             FROM    publons_reviews
             WHERE   journal_id = ?

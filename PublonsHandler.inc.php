@@ -33,24 +33,24 @@ class PublonsHandler extends Handler {
      * @param Request $request
      */
     function exportReview($args, $request) {
-        $plugin =self::$plugin;
-        $templateMgr =& TemplateManager::getManager();
+        $plugin = self::$plugin;
+        $templateMgr = TemplateManager::getManager();
         $templateMgr->addStyleSheet('publons-base', Request::getBaseUrl() . '/' . $plugin->getStyleSheet());
         $templateMgr->addStyleSheet('publons-font', 'https://fonts.googleapis.com/css?family=Roboto');
 
         $reviewId = intval($args[0]);
 
-        $publonsReviewsDao =& DAORegistry::getDAO('PublonsReviewsDAO');
-        $submissionCommentDao =& DAORegistry::getDAO('SubmissionCommentDAO');
-        $reviewerSubmissionDao =& DAORegistry::getDAO('ReviewerSubmissionDAO');
+        $publonsReviewsDao = DAORegistry::getDAO('PublonsReviewsDAO');
+        $submissionCommentDao = DAORegistry::getDAO('SubmissionCommentDAO');
+        $reviewerSubmissionDao = DAORegistry::getDAO('ReviewerSubmissionDAO');
 
-        $exported =& $publonsReviewsDao->getPublonsReviewsIdByReviewId($reviewId);
+        $exported = $publonsReviewsDao->getPublonsReviewsIdByReviewId($reviewId);
 
         $reviewSubmission = $reviewerSubmissionDao->getReviewerSubmission($reviewId);
 
         $reviewerId = $reviewSubmission->getReviewerId();
 
-        $user =& Request::getUser();
+        $user = Request::getUser();
 
         if ($exported) {
             // Check that the review hasn't been exported already
@@ -84,7 +84,7 @@ class PublonsHandler extends Handler {
             $rname = $user->getFullName();
             $remail = $user->getEmail();
 
-            $reviewAssignmentDao =& DAORegistry::getDAO('ReviewAssignmentDAO');
+            $reviewAssignmentDao = DAORegistry::getDAO('ReviewAssignmentDAO');
             $reviewAssignment = $reviewAssignmentDao->getById($reviewId);
 
             $body = '';
@@ -102,8 +102,8 @@ class PublonsHandler extends Handler {
             if ($reviewFormId = $reviewAssignment->getReviewFormId()) {
 
                 $reviewId = $reviewAssignment->getId();
-                $reviewFormResponseDao =& DAORegistry::getDAO('ReviewFormResponseDAO');
-                $reviewFormElementDao =& DAORegistry::getDAO('ReviewFormElementDAO');
+                $reviewFormResponseDao = DAORegistry::getDAO('ReviewFormResponseDAO');
+                $reviewFormElementDao = DAORegistry::getDAO('ReviewFormElementDAO');
                 $reviewFormElements = $reviewFormElementDao->getReviewFormElements($reviewFormId);
 
                 foreach ($reviewFormElements as $reviewFormElement) if ($reviewFormElement->getIncluded()) {

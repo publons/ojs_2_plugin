@@ -128,7 +128,7 @@ class PublonsPlugin extends GenericPlugin {
         $templateMgr = TemplateManager::getManager($request);
         $templateMgr->register_function('plugin_url', array($this, 'smartyPluginUrl'));
 
-        $journal =& Request::getJournal();
+        $journal = Request::getJournal();
         switch ($request->getUserVar('verb')) {
             case 'connect':
                 $this->import('classes.form.PublonsSettingsForm');
@@ -222,11 +222,11 @@ class PublonsPlugin extends GenericPlugin {
     }
 
 
-    function step3SubmissionOutputFilter($output, &$templateMgr) {
+    function step3SubmissionOutputFilter($output, $templateMgr) {
 
-        $plugin =& PluginRegistry::getPlugin('generic', $this->getName());
+        $plugin = PluginRegistry::getPlugin('generic', $this->getName());
 
-        $reviewerSubmissionDao =& DAORegistry::getDAO('ReviewerSubmissionDAO');
+        $reviewerSubmissionDao = DAORegistry::getDAO('ReviewerSubmissionDAO');
         $reviewSubmission = $templateMgr->get_template_vars('submission');
         $reviewId = $reviewSubmission->getReviewId();
         $journalId = $reviewSubmission->getJournalId();
@@ -244,7 +244,7 @@ class PublonsPlugin extends GenericPlugin {
                 $beforeInsertPoint = substr($output, 0, $match);
                 $afterInsertPoint = substr($output, $match - strlen($output));
 
-                $templateMgr =& TemplateManager::getManager();
+                $templateMgr = TemplateManager::getManager();
 
                 $newOutput = $beforeInsertPoint;
                 if (empty($done)){
@@ -267,10 +267,10 @@ class PublonsPlugin extends GenericPlugin {
      * @param $templateMgr TemplateManager
      * @return $string
      */
-    function completedSubmissionOutputFilter($output, &$templateMgr) {
-        $plugin =& PluginRegistry::getPlugin('generic', $this->getName());
+    function completedSubmissionOutputFilter($output, $templateMgr) {
+        $plugin = PluginRegistry::getPlugin('generic', $this->getName());
 
-        $reviewerSubmissionDao =& DAORegistry::getDAO('ReviewerSubmissionDAO');
+        $reviewerSubmissionDao = DAORegistry::getDAO('ReviewerSubmissionDAO');
         $reviewSubmission = $templateMgr->get_template_vars('submission');
         $reviewId = $reviewSubmission->getReviewId();
         $journalId = $reviewSubmission->getJournalId();
@@ -279,11 +279,11 @@ class PublonsPlugin extends GenericPlugin {
 
         // Only display if the plugin has been setup
         if ($auth_token){
-            $publonsReviewsDao =& DAORegistry::getDAO('PublonsReviewsDAO');
+            $publonsReviewsDao = DAORegistry::getDAO('PublonsReviewsDAO');
             $published = $publonsReviewsDao->getPublonsReviewsIdByReviewId($reviewId);
             $info_url = $this->getSetting($journalId, 'info_url');
 
-            $templateMgr =& TemplateManager::getManager();
+            $templateMgr = TemplateManager::getManager();
             $templateMgr->unregister_outputfilter(array(&$this, 'completedSubmissionOutputFilter'));
             $request = Application::getRequest();
             $router = $request->getRouter();
@@ -329,7 +329,7 @@ class PublonsPlugin extends GenericPlugin {
     /**
      * @see PKPPlugin::smartyPluginUrl()
      */
-    function smartyPluginUrl($params, &$smarty) {
+    function smartyPluginUrl($params, $smarty) {
         $path = array($this->getCategory(), $this->getName());
         if (is_array($params['path'])) {
             $params['path'] = array_merge($path, $params['path']);

@@ -29,8 +29,8 @@ class PublonsSettingsForm extends Form {
      * @param $journalId int
      * @see Form::Form()
      */
-    function PublonsSettingsForm(&$plugin, $journalId) {
-        $this->_plugin =& $plugin;
+    function PublonsSettingsForm($plugin, $journalId) {
+        $this->_plugin = $plugin;
         $this->_journalId = $journalId;
 
         parent::__construct($plugin->getTemplatePath() . 'publonsSettingsForm.tpl');
@@ -47,7 +47,7 @@ class PublonsSettingsForm extends Form {
      * @see Form::initData()
      */
     function initData() {
-        $plugin =& $this->_plugin;
+        $plugin = $this->_plugin;
         $journalId = $this->_journalId;
 
         // Initialize from plugin settings
@@ -63,7 +63,7 @@ class PublonsSettingsForm extends Form {
      */
     function readInputData() {
         $this->readUserVars(array('auth_key', 'username', 'password', 'info_url'));
-        $request =& PKPApplication::getRequest();
+        $request = PKPApplication::getRequest();
         $password = $request->getUserVar('password');
 
         $this->setData('password', $password);
@@ -115,7 +115,7 @@ class PublonsSettingsForm extends Form {
      * @see Form::execute()
      */
     function execute() {
-        $plugin =& $this->_plugin;
+        $plugin = $this->_plugin;
         $plugin->updateSetting($this->_journalId, 'auth_token', $this->getData('auth_token') , 'string');
         $plugin->updateSetting($this->_journalId, 'auth_key', $this->getData('auth_key'), 'string');
         $plugin->updateSetting($this->_journalId, 'info_url', $this->getData('info_url'), 'string');

@@ -128,7 +128,7 @@ class PublonsPlugin extends GenericPlugin {
         $templateMgr = TemplateManager::getManager($request);
         $templateMgr->register_function('plugin_url', array($this, 'smartyPluginUrl'));
 
-        $journal = Request::getJournal();
+        $journal = $request->getJournal();
         switch ($request->getUserVar('verb')) {
             case 'connect':
                 $this->import('classes.form.PublonsSettingsForm');
@@ -244,7 +244,7 @@ class PublonsPlugin extends GenericPlugin {
                 $beforeInsertPoint = substr($output, 0, $match);
                 $afterInsertPoint = substr($output, $match - strlen($output));
 
-                $templateMgr = TemplateManager::getManager();
+                $templateMgr = TemplateManager::getManager(PKPApplication::getRequest());
 
                 $newOutput = $beforeInsertPoint;
                 if (empty($done)){
@@ -283,7 +283,7 @@ class PublonsPlugin extends GenericPlugin {
             $published = $publonsReviewsDao->getPublonsReviewsIdByReviewId($reviewId);
             $info_url = $this->getSetting($journalId, 'info_url');
 
-            $templateMgr = TemplateManager::getManager();
+            $templateMgr = TemplateManager::getManager(PKPApplication::getRequest());
             $templateMgr->unregister_outputfilter(array(&$this, 'completedSubmissionOutputFilter'));
             $request = Application::getRequest();
             $router = $request->getRouter();

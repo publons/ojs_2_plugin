@@ -259,4 +259,3 @@ class PublonsHandler extends Handler {
     }
 }
 
-?>

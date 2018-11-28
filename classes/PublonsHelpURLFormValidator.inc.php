@@ -42,4 +42,3 @@ class PublonsHelpURLFormValidator extends Validator{
     }
 }
 
-?>

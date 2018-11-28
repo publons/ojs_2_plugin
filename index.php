@@ -20,4 +20,3 @@ require_once('PublonsPlugin.inc.php');
 
 return new PublonsPlugin();
 
-?>

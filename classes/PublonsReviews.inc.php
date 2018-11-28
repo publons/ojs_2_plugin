@@ -169,4 +169,3 @@ class PublonsReviews extends DataObject {
 
 }
 
-?>

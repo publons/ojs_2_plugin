@@ -57,6 +57,12 @@
     ]]>
   </message>
 
+  <message key="plugins.generic.publons.notice.title">Добавить мою рецензию к профилю Publons</message>
+  <message key="plugins.generic.publons.notice.explanation">
+    <![CDATA[
+      Вы сможете добавить свою рецензию на <a href="https://publons.com">Publons</a> на 4й вкладке по окончании рецензирования.
+    ]]>
+
   <message key="plugins.generic.publons.export.successful">Данная рецензия успешно отправлена</message>
   <message key="plugins.generic.publons.export.duplicate">Эта рецензия уже отправлена Publons</message>
   <message key="plugins.generic.publons.export.error">Ошибка отправки рецензии Publons</message>

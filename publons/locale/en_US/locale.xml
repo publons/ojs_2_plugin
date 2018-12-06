@@ -60,7 +60,7 @@
   <message key="plugins.generic.publons.export.claimReview">Claim review</message>
   <message key="plugins.generic.publons.export.next.autoClaimed">Your review has been auto-claimed on Publons.</message>
   <message key="plugins.generic.publons.export.next.partnerEmailed">Your journal has emailed you with a link to claim this review or you can click on the button below.</message>
-  <message key="plugins.generic.publons.export.next.publonsEmailed">Publons has emailed you with a link to clain this review or you can click on the button below.</message>
+  <message key="plugins.generic.publons.export.next.publonsEmailed">Publons has emailed you with a link to claim this review or you can click on the button below.</message>
   <message key="plugins.generic.publons.export.next.setAutoClaim">To skip this step in future please select "Automatically add reviews from partnered journals" in your Publons settings.</message>
   <message key="plugins.generic.publons.export.next.linkClick">You have opted out of receiving Publons emails, to claim this review you must click the link below.</message>
   <message key="plugins.generic.publons.export.backToReviewPage">Back to review page</message>

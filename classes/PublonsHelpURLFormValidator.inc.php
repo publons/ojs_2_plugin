@@ -20,25 +20,25 @@
 import('lib.pkp.classes.validation.Validator');
 
 class PublonsHelpURLFormValidator extends Validator{
-    /**
-     * Constructor.
-     */
-    function PublonsHelpURLFormValidator() {
-    }
+	/**
+	 * Constructor.
+	 */
+	function PublonsHelpURLFormValidator() {
+	}
 
-    /**
-     * Check whether the given value is valid.
-     * @param $value mixed the value to be checked
-     * @return boolean
-     */
-    function isValid($value) {
+	/**
+	 * Check whether the given value is valid.
+	 * @param $value mixed the value to be checked
+	 * @return boolean
+	 */
+	function isValid($value) {
 
-        if (substr( $value, 0, 19 ) !== "https://publons.com"){
-            return false;
-        }
+		if (substr( $value, 0, 19 ) !== "https://publons.com"){
+			return false;
+		}
 
-        return true;
+		return true;
 
-    }
+	}
 }
 

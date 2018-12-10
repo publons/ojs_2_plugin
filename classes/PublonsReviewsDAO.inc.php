@@ -23,7 +23,7 @@ class PublonsReviewsDAO extends DAO {
 	 */
 	function getPublonsReviews($publonsReviewsId) {
 		$result = $this->retrieve(
-			'SELECT * FROM publons_reviews WHERE publons_reviews_id = ?', $publonsReviewsId
+			'SELECT * FROM publons_reviews WHERE publons_reviews_id = ?', (int) $publonsReviewsId
 		);
 
 		$returner = null;
@@ -84,10 +84,10 @@ class PublonsReviewsDAO extends DAO {
 				$this->datetimeToDB($publonsReviews->getDateAdded())
 			),
 			array(
-				$publonsReviews->getJournalId(),
-				$publonsReviews->getSubmissionId(),
-				$publonsReviews->getReviewerId(),
-				$publonsReviews->getReviewId(),
+				(int) $publonsReviews->getJournalId(),
+				(int) $publonsReviews->getSubmissionId(),
+				(int) $publonsReviews->getReviewerId(),
+				(int) $publonsReviews->getReviewId(),
 				$publonsReviews->getTitleEn()
 			)
 		);
@@ -182,9 +182,9 @@ class PublonsReviewsDAO extends DAO {
 				AND journal_id = ?
 				AND reviewer_id = ?',
 			array(
-				$submissionId,
-				$journalId,
-				$reviewerId
+				(int) $submissionId,
+				(int) $journalId,
+				(int) $reviewerId
 			)
 		);
 
@@ -208,7 +208,7 @@ class PublonsReviewsDAO extends DAO {
 				FROM publons_reviews
 				WHERE review_id = ?',
 			array(
-				$reviewId
+				(int) $reviewId
 			)
 		);
 
@@ -232,7 +232,7 @@ class PublonsReviewsDAO extends DAO {
 			FROM	publons_reviews
 			WHERE   journal_id = ?
 			ORDER BY '$sort'",
-			$journalId,
+			(int) $journalId,
 			$rangeInfo
 		);
 		$returner = new DAOResultFactory($result, $this, '_returnPublonsReviewsFromRow');

@@ -123,10 +123,8 @@ class PublonsPlugin extends GenericPlugin {
                 $this->import('classes.form.PublonsAuthForm');
                 $form = new PublonsAuthForm($this, $journal->getId());
                 if (Request::getUserVar('save')) {
-                    $form->readInputData();
                     if ($form->validate()) {
-                        $form->execute();
-                         Request::redirect(null, 'manager', 'plugin', array('generic', $this->getName(), 'select'));
+                        Request::redirect(null, 'manager', 'plugin', array('generic', $this->getName(), 'select'));
                         return false;
                     } else {
                         $form->display();

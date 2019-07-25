@@ -35,9 +35,9 @@ class PublonsAuthForm extends Form {
 
         parent::Form($plugin->getTemplatePath() . 'publonsAuthForm.tpl');
         $this->addCheck(new FormValidator($this, 'username', FORM_VALIDATOR_REQUIRED_VALUE, 'plugins.generic.publons.settings.usernameRequired'));
-        $this->addCheck(new FormValidator($this, 'password', FORM_VALIDATOR_REQUIRED_VALUE, 'plugins.generic.publons.settings.passwordRequired'));
+        $this->addCheck(new FormValidator($this, 'auth_token', FORM_VALIDATOR_REQUIRED_VALUE, 'plugins.generic.publons.settings.auth_tokenRequired'));
         $this->addCheck(new FormValidator($this, 'auth_key', FORM_VALIDATOR_REQUIRED_VALUE, 'plugins.generic.publons.settings.authKeyRequired'));
-        $this->addCheck(new FormValidator($this, 'auth_token', FORM_VALIDATOR_REQUIRED_VALUE, 'plugins.generic.publons.settings.authTokenRequired'));
+        $this->addCheck(new FormValidator($this, 'auth_token', FORM_VALIDATOR_REQUIRED_VALUE, 'plugins.generic.publons.settings.auth_tokenRequired'));
         $this->addCheck(new FormValidator($this, 'info_url', FORM_VALIDATOR_OPTIONAL_VALUE, 'plugins.generic.publons.settings.invalidHelpUrl', new PublonsHelpURLFormValidator()));
         $this->addCheck(new FormValidatorPost($this));
     }
@@ -51,68 +51,8 @@ class PublonsAuthForm extends Form {
         // Initialize from plugin settings
         $this->setData('username', $plugin->getSetting($this->_journalId, 'username'));
         $this->setData('auth_key', $plugin->getSetting($this->_journalId, 'auth_key'));
+        $this->setData('auth_token', $plugin->getSetting($this->_journalId, 'auth_token'));
         $this->setData('info_url', $plugin->getSetting($this->_journalId, 'info_url'));
-
-        // If password has already been set, echo back slug
-        $password = $plugin->getSetting($this->_journalId, 'password');
-        if (!empty($password)) {
-            $this->setData('password', $password);
-        }
     }
-
-    /**
-     * @see Form::readInputData()
-     */
-    function readInputData() {
-        $this->readUserVars(array('auth_key', 'username', 'password', 'info_url'));
-        $request =& PKPApplication::getRequest();
-        $password = $request->getUserVar('password');
-
-        $this->setData('password', $password);
-
-        if (is_null($_SERVER["HTTP_PUBLONS_URL"])){
-            $url = "https://publons.com/api/v2/token/";
-        } else {
-            $url = $_SERVER["HTTP_PUBLONS_URL"]."/api/v2/token/";
-        }
-
-        $data = array("username" => $this->getData('username'), "password" => $this->getData('password'));
-        $data_string = json_encode($data);
-
-        $curl = curl_init($url);
-        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "POST");
-        curl_setopt($curl, CURLOPT_POSTFIELDS, $data_string);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_HTTPHEADER, array(
-            'Content-Type: application/json',
-            'Content-Length: ' . strlen($data_string))
-        );
-
-        $httpResult = curl_exec($curl);
-        $httpStatus = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-        $httpError = curl_error($curl);
-        curl_close ($curl);
-        $returned = array(
-            'status' => $httpStatus,
-            'result' => $httpResult,
-            'error'  => $httpError
-        );
-
-        if($returned['status'] == 200) {
-            $token = json_decode($returned['result'], true)['token'];
-            $this->setData('auth_token', $token);
-        }
-    }
-
-    /**
-     * @see Form::execute()
-     */
-    function execute() {
-        $plugin =& $this->_plugin;
-        $plugin->updateSetting($this->_journalId, 'auth_token', $this->getData('auth_token') , 'string');
-        $plugin->updateSetting($this->_journalId, 'auth_key', $this->getData('auth_key'), 'string');
-        $plugin->updateSetting($this->_journalId, 'info_url', $this->getData('info_url'), 'string');
-    }
-
 
 }

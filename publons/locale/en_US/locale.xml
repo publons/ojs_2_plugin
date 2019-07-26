@@ -33,8 +33,7 @@
   <message key="plugins.generic.publons.settings.auth_tokenRequired">Please enter the correct Authorization token (you can find that on https://publons.com/api/v2/ under Token).</message>
   <message key="plugins.generic.publons.settings.authKeyRequired">Please enter the correct API key for your Publons integration.</message>
   <message key="plugins.generic.publons.settings.invalidHelpUrl">Please start the url with https://</message>
-  <message key="plugins.generic.publons.settings.auth_tokenRequired">Please ensure that your email address and Authorization Token are correct.</message>
-  <message key="plugins.generic.publons.settings.auth_tokenLabel">Authorization Token*</message>
+  <message key="plugins.generic.publons.settings.auth_token">Authorization Token</message>
   <message key="plugins.generic.publons.settings.usernameDescription">The email address of the Publons account with an integration token.</message>
   <message key="plugins.generic.publons.settings.auth_tokenDescription">The Authorization token for the account specified above (you can find that on https://publons.com/api/v2/ under Token).</message>
   <message key="plugins.generic.publons.settings.urlDescription">The URL of the journal landing page on Publons.</message>

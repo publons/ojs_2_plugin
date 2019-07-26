@@ -38,9 +38,9 @@
 				<td>{translate key="plugins.generic.publons.settings.auth_tokenDescription"}</td>
 			</tr>
 			<tr valign="top">
-				<td class="label">{translate key="plugins.generic.publons.settings.auth_tokenLabel"}</td>
+				<td class="label">{fieldLabel name="auth_token" required="true" key="plugins.generic.publons.settings.auth_token"}</td>
 				<td class="value">
-					<input type="text" size=73" name="auth_token" id="password" value="{$auth_token|escape}" size="20" maxlength="90" class="textField"/>
+					<input type="text" size=73" name="auth_token" id="auth_token" value="{$auth_token|escape}" size="20" maxlength="90" class="textField"/>
 				</td>
 			</tr>
 			<tr>

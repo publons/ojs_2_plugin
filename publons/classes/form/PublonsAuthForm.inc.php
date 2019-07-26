@@ -37,7 +37,6 @@ class PublonsAuthForm extends Form {
         $this->addCheck(new FormValidator($this, 'username', FORM_VALIDATOR_REQUIRED_VALUE, 'plugins.generic.publons.settings.usernameRequired'));
         $this->addCheck(new FormValidator($this, 'auth_token', FORM_VALIDATOR_REQUIRED_VALUE, 'plugins.generic.publons.settings.auth_tokenRequired'));
         $this->addCheck(new FormValidator($this, 'auth_key', FORM_VALIDATOR_REQUIRED_VALUE, 'plugins.generic.publons.settings.authKeyRequired'));
-        $this->addCheck(new FormValidator($this, 'auth_token', FORM_VALIDATOR_REQUIRED_VALUE, 'plugins.generic.publons.settings.auth_tokenRequired'));
         $this->addCheck(new FormValidator($this, 'info_url', FORM_VALIDATOR_OPTIONAL_VALUE, 'plugins.generic.publons.settings.invalidHelpUrl', new PublonsHelpURLFormValidator()));
         $this->addCheck(new FormValidatorPost($this));
     }
@@ -53,6 +52,25 @@ class PublonsAuthForm extends Form {
         $this->setData('auth_key', $plugin->getSetting($this->_journalId, 'auth_key'));
         $this->setData('auth_token', $plugin->getSetting($this->_journalId, 'auth_token'));
         $this->setData('info_url', $plugin->getSetting($this->_journalId, 'info_url'));
+    }
+
+    /**
+     * @see Form::readInputData()
+     */
+    function readInputData() {
+        $this->readUserVars(array('username', 'auth_token', 'auth_key', 'password', 'info_url'));
+    }
+
+    /**
+     * @see Form::execute()
+     */
+    function execute() {
+        $plugin =& $this->_plugin;
+
+        $plugin->updateSetting($this->_journalId, 'username', $this->getData('username') , 'string');
+        $plugin->updateSetting($this->_journalId, 'auth_token', $this->getData('auth_token') , 'string');
+        $plugin->updateSetting($this->_journalId, 'auth_key', $this->getData('auth_key'), 'string');
+        $plugin->updateSetting($this->_journalId, 'info_url', $this->getData('info_url'), 'string');
     }
 
 }

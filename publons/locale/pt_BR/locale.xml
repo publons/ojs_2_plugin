@@ -34,7 +34,7 @@
   <message key="plugins.generic.publons.settings.auth_tokenRequired">Por favor, insira a senha correta.</message>
   <message key="plugins.generic.publons.settings.authKeyRequired">Por favor, insira o API key correto para sua integração com Publons.</message>
   <message key="plugins.generic.publons.settings.invalidHelpUrl">Por favor, inicie a url com https://</message>
-  <message key="plugins.generic.publons.settings.auth_tokenRequired">Por favor, verifique se seu email e sua senha estão corretos.</message>
+  <message key="plugins.generic.publons.settings.auth_token">Por favor, verifique se seu email e sua senha estão corretos.</message>
   <message key="plugins.generic.publons.settings.usernameDescription">O endereço de email da conta Publons com o código de integração.</message>
   <message key="plugins.generic.publons.settings.auth_tokenDescription">A senha para a conta de integração especificada acima.</message>
     <message key="plugins.generic.publons.settings.auth_tokenLabel">Authorization Token</message>

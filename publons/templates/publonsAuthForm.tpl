@@ -25,15 +25,6 @@
 		{include file="common/formErrors.tpl"}
 
 		<table width="100%" class="data">
-			<tr>
-				<td>&nbsp;</td>
-				<td>{translate key="plugins.generic.publons.settings.usernameDescription"}</td>
-			</tr>
-			<tr valign="top">
-				<td class="label">{fieldLabel name="username" required="true" key="user.email"}</td>
-				<td class="value"><input type="text" size="73" name="username" id="username" value="{$username|escape}" size="20" maxlength="90" class="textField" /></td>
-			</tr>
-			<tr>
 				<td>&nbsp;</td>
 				<td>{translate key="plugins.generic.publons.settings.auth_tokenDescription"}</td>
 			</tr>

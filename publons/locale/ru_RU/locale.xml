@@ -30,12 +30,10 @@
   <message key="plugins.generic.publons.settings.publishedTable.date.added">Дата добавления</message>
   <message key="plugins.generic.publons.settings.publishedTable.review">Рецензия</message>
   <message key="plugins.generic.publons.settings.publishedTable.noReviews">Нет рецензий отправленных Publons</message>
-  <message key="plugins.generic.publons.settings.usernameRequired">Пожалуйста введите логин (адрес электронной почты) пользователя Publons с правом доступа к API.</message>
   <message key="plugins.generic.publons.settings.auth_tokenRequired">Пожалуйста введите верный пароль.</message>
   <message key="plugins.generic.publons.settings.authKeyRequired">Пожалуйста введите верный API ключ для интеграции с Publons.</message>
   <message key="plugins.generic.publons.settings.auth_token">Пожалуйста убедитесь что вы ввели верные логин и пароль.</message>
   <message key="plugins.generic.publons.settings.invalidHelpUrl">Пожалуйста убедитесь что URL начинается с https://</message>
-  <message key="plugins.generic.publons.settings.usernameDescription">Логин (адрес электронной почты) пользователя Publons с правом доступа к API.</message>
   <message key="plugins.generic.publons.settings.auth_tokenDescription">Пароль учетной записи Publons.</message>
   <message key="plugins.generic.publons.settings.auth_tokenLabel">Authorization Token</message>
   <message key="plugins.generic.publons.settings.urlDescription">URL адрес целевой страницы (landing page) на Publons.</message>

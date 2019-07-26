@@ -34,7 +34,6 @@ class PublonsAuthForm extends Form {
         $this->_journalId = $journalId;
 
         parent::Form($plugin->getTemplatePath() . 'publonsAuthForm.tpl');
-        $this->addCheck(new FormValidator($this, 'username', FORM_VALIDATOR_REQUIRED_VALUE, 'plugins.generic.publons.settings.usernameRequired'));
         $this->addCheck(new FormValidator($this, 'auth_token', FORM_VALIDATOR_REQUIRED_VALUE, 'plugins.generic.publons.settings.auth_tokenRequired'));
         $this->addCheck(new FormValidator($this, 'auth_key', FORM_VALIDATOR_REQUIRED_VALUE, 'plugins.generic.publons.settings.authKeyRequired'));
         $this->addCheck(new FormValidator($this, 'info_url', FORM_VALIDATOR_OPTIONAL_VALUE, 'plugins.generic.publons.settings.invalidHelpUrl', new PublonsHelpURLFormValidator()));
@@ -48,7 +47,6 @@ class PublonsAuthForm extends Form {
         $plugin =& $this->_plugin;
 
         // Initialize from plugin settings
-        $this->setData('username', $plugin->getSetting($this->_journalId, 'username'));
         $this->setData('auth_key', $plugin->getSetting($this->_journalId, 'auth_key'));
         $this->setData('auth_token', $plugin->getSetting($this->_journalId, 'auth_token'));
         $this->setData('info_url', $plugin->getSetting($this->_journalId, 'info_url'));
@@ -58,7 +56,7 @@ class PublonsAuthForm extends Form {
      * @see Form::readInputData()
      */
     function readInputData() {
-        $this->readUserVars(array('username', 'auth_token', 'auth_key', 'password', 'info_url'));
+        $this->readUserVars(array('auth_token', 'auth_key', 'password', 'info_url'));
     }
 
     /**
@@ -67,7 +65,6 @@ class PublonsAuthForm extends Form {
     function execute() {
         $plugin =& $this->_plugin;
 
-        $plugin->updateSetting($this->_journalId, 'username', $this->getData('username') , 'string');
         $plugin->updateSetting($this->_journalId, 'auth_token', $this->getData('auth_token') , 'string');
         $plugin->updateSetting($this->_journalId, 'auth_key', $this->getData('auth_key'), 'string');
         $plugin->updateSetting($this->_journalId, 'info_url', $this->getData('info_url'), 'string');

@@ -31,15 +31,15 @@
 			<tr valign="top">
 				<td class="label">{fieldLabel name="auth_token" required="true" key="plugins.generic.publons.settings.auth_token"}</td>
 				<td class="value">
-					<input type="text" size=73" name="auth_token" id="auth_token" value="{$auth_token|escape}" size="20" maxlength="90" class="textField"/>
+					<input type="text" size=73" name="auth_token" id="journalToken" value="{$auth_token|escape}" size="20" maxlength="90" class="textField"/>
 				</td>
 			</tr>
 			<tr>
 				<td>&nbsp;</td>
-				<td>{translate key="plugins.generic.publons.settings.auth_keyDescription"}</td>
+				<td>{translate key="plugins.generic.publons.settings.journalTokenDescription"}</td>
 			</tr>
 			<tr valign="top">
-				<td class="label">{fieldLabel name="auth_key" required="true" key="plugins.generic.publons.settings.auth_key"}</td>
+				<td class="label">{fieldLabel name="journalToken" required="true" key="plugins.generic.publons.settings.journalToken"}</td>
 				<td class="value">
 					<input type="text" size="73" name="auth_key" id="auth_key" value="{$auth_key|escape}" size="20" maxlength="90" class="textField"/>
 				</td>

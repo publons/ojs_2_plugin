@@ -30,17 +30,16 @@
   <message key="plugins.generic.publons.settings.publishedTable.date.added">Дата добавления</message>
   <message key="plugins.generic.publons.settings.publishedTable.review">Рецензия</message>
   <message key="plugins.generic.publons.settings.publishedTable.noReviews">Нет рецензий отправленных Publons</message>
-  <message key="plugins.generic.publons.settings.auth_tokenRequired">Пожалуйста введите верный пароль.</message>
-  <message key="plugins.generic.publons.settings.journalTokenRequired">Пожалуйста введите верный API ключ для интеграции с Publons.</message>
-  <message key="plugins.generic.publons.settings.auth_token">Пожалуйста убедитесь что вы ввели верные логин и пароль.</message>
   <message key="plugins.generic.publons.settings.invalidHelpUrl">Пожалуйста убедитесь что URL начинается с https://</message>
-  <message key="plugins.generic.publons.settings.auth_tokenDescription">Пароль учетной записи Publons.</message>
   <message key="plugins.generic.publons.settings.auth_tokenLabel">Authorization Token</message>
   <message key="plugins.generic.publons.settings.urlDescription">URL адрес целевой страницы (landing page) на Publons.</message>
   <message key="plugins.generic.publons.settings.url">URL</message>
-  <message key="plugins.generic.publons.settings.journalToken">API ключ</message>
-  <message key="plugins.generic.publons.settings.journalTokenDescription">API ключ журнала для отправки рецензий Publons</message>
-
+  <message key="plugins.generic.publons.settings.auth_tokenRequired">Указан неверный токен авторизации (токен можно найти на странице https://publons.com/api/v2/).</message>
+  <message key="plugins.generic.publons.settings.journalTokenRequired">Указан неверный токен журнала для интеграции.</message>
+  <message key="plugins.generic.publons.settings.auth_token">Токен авторизации</message>
+  <message key="plugins.generic.publons.settings.auth_tokenDescription">Токен авторизации вашего аккаунта (токен можно найти на странице https://publons.com/api/v2/).</message>
+  <message key="plugins.generic.publons.settings.journalToken">Токен журнала</message>
+  <message key="plugins.generic.publons.settings.journalTokenDescription">Токен интегрируемого журнала (предоставляется Publons).</message>
 
   <message key="plugins.generic.publons.confirmation.title">Отправить мою рецензию Publons</message>
   <message key="plugins.generic.publons.confirmation.termsAndConditions">
@@ -86,26 +85,11 @@
 
   <message key="plugins.generic.publons.settings.ps">
     <![CDATA[
-      <p>
-        После активации плагина рецензенты могут добавлять рецензии к своим профилям на Publons.
-        Соответствующая опция будет доступна на странице рецензирования, после того как рецензия закончена.</p><p>
-        Если рецензент подтвердил отправление своей рецензии Publon, информация о рецензии будет автоматически отправлена
-        Publons и рецензент получит email (на адрес электронной почты с которым они зарегистрированы на сайте журнала)
-        с приглашением добавить рецензию к их профилю на Publons.
-      </p>
-      <p>
-        Когда пользователь переходит по ссылке в приглашении, он будет перенаправлен на сайт Publons,
-        где после регистрации (или входа в существующую учетную запись) рецензия будет добавлена к их профилю.
-        Пользователи также могут выбрать соответствующую опцию "Automatically add reviews from partnered journals"
-        на странице настроек профиля Publons чтобы автоматически добавлять отправленные рецензии.
-      </p>
-      <p>
-        По умолчанию Publons не публикует содержимое рецензий. Тем не менее, если редакция журнала и рецензент позволяют,
-        Publons опубликует содержимое рецензии как только статья будет опубликована.
-      </p>
-      <p>
-        Вкладка "Отправленные Рецензии" показывает список рецензий отправленных Publons.
-      </p>
+      <p>После активации плагина рецензенты могут добавлять рецензии к своим профилям на Publons. Соответствующая опция будет доступна на странице рецензирования, после того как рецензия закончена.</p>
+      <p>Если рецензент подтвердил отправление своей рецензии Publon, информация о рецензии будет автоматически отправлена Publons и рецензент получит email (на адрес электронной почты с которым они зарегистрированы на сайте журнала) с приглашением добавить рецензию к их профилю на Publons.</p>
+      <p>Когда пользователь переходит по ссылке в приглашении, он будет перенаправлен на сайт Publons, где после регистрации (или входа в существующую учетную запись) рецензия будет добавлена к их профилю. Пользователи также могут выбрать соответствующую опцию "Automatically add reviews from partnered journals" на странице настроек профиля Publons чтобы автоматически добавлять отправленные рецензии.</p>
+      <p>По умолчанию Publons не публикует содержимое рецензий. Тем не менее, если редакция журнала и рецензент позволяют, Publons опубликует содержимое рецензии как только статья будет опубликована.</p>
+      <p>Вкладка "Отправленные Рецензии" показывает список рецензий отправленных Publons.</p>
     ]]>
   </message>
 

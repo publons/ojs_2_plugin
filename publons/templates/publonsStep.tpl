@@ -31,7 +31,7 @@
             </button>
         {else}
             <button type="submit" class="publons-button" disabled>
-                <span title="{translate key="plugins.generic.button.publons.publishedReview"}">
+                <span title="{translate key="plugins.generic.publons.button.publishedReview"}">
                     <img src="https://publons.com/static/images/logos/square/blue_white_shadow.png" height="30" width="30">
                     {translate key="plugins.generic.publons.button.publishedReview"}
                 </span>

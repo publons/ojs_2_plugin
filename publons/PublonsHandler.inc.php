@@ -243,6 +243,10 @@ class PublonsHandler extends Handler {
         $httpStatus = curl_getinfo($curl, CURLINFO_HTTP_CODE);
         $httpError = curl_error($curl);
         curl_close ($curl);
+
+        echo "<script>console.log( 'Debug Objects: " . $httpResult . "' );</script>";
+        echo "<script>console.log( 'Debug Objects: " . $httpStatus . "' );</script>";
+        echo "<script>console.log( 'Debug Objects: " . $httpError . "' );</script>";
         return array(
             'status' => $httpStatus,
             'result' => json_decode($httpResult, true),

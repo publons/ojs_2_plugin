@@ -13,7 +13,6 @@
 
 <locale name="ru_RU" full_name="Russian">
 
-  <message key="user.password">Пароль</message>
   <message key="user.email">Адрес (E-mail)</message>
 
   <message key="plugins.generic.publons.displayName">Publons Плагин</message>

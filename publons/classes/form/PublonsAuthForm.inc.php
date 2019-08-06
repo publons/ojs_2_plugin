@@ -56,7 +56,7 @@ class PublonsAuthForm extends Form {
      * @see Form::readInputData()
      */
     function readInputData() {
-        $this->readUserVars(array('auth_token', 'auth_key', 'password', 'info_url'));
+        $this->readUserVars(array('auth_token', 'auth_key', 'info_url'));
     }
 
     /**

@@ -1,6 +1,6 @@
-# OJS Publons Plugin
+# OJS 2.x Publons Plugin
 
-Version: 2.0
+Version: 2.5
 
 Developed and maintained by: Publons Ltd.
 
@@ -15,22 +15,22 @@ This plugin is licensed under the GNU General Public License v3.
 See the accompanying OJS file docs/COPYING for the complete terms of this license.
 
 ### System Requirements
-- OJS 2.4.5 or greater (Not working on OJS 3.0 yet).
+- OJS 2.4.5 or greater, less than OJS 3.0.
 - PHP 5.6.*
 - CURL support for PHP.
 - ZipArchive support for PHP.
 
 ### Installation
 To install the plugin:
- - Download the plugin file `publons.tar.gz` from https://github.com/publons/ojs/releases/latest
+ - Download the plugin file `publons.tar.gz` from https://github.com/publons/ojs/branches/active
  - On your OJS site go to Home > User > Journal Management > Plugin Management > Install a New Plugin,
    select the publons.tar.gz file you downloaded  and click "Continue"
  - Install the database schema: run the following command from your OJS directory:
     `$ php tools/dbXMLtoSQL.php -schema execute plugins/generic/publons/schema.xml`
  - Enable the plugin by going to:  Home > User > Journal Management > Plugin Management > Generic Plugins and selecting "ENABLE" under "Publons Plugin"
  - Set up correct credentials to post reviews to Publons by going to Home > User > Journal Management > Plugin Management > Generic Plugins and click “CONNECTION” under "Publons Plugin"
-   - Enter the username and the password of the Publons user who has API access to Publons so that the plugin can retrieve the authorisation token required.
-   - Enter the API key of the journal found on the Publons partner dashboard under 'Integrations'.
+   - Enter the Authorization Token of the Publons user who has API access to Publons. Authorization Token can be found here: https://publons.com/api/v2 (note: you need to be logged in to see this).
+   - Enter the Journal Token provided by Publons.
    - __Optional__. Add the link to your journal landing page on Publons so users can find more info about this.
 
 ### Usage
@@ -55,3 +55,4 @@ Original version written by Natalya Mollecker for the Media Sphera Publishing Ho
 - 2.0 - Refactor of how plugin works, large bugfixes, styling changes.
 - 2.0.1 - Reviews without content will now be sent to publons
 - 2.0.2 - API token retrieval with password's that have special characters bugfix.
+- 2.5.0 - Updated connection to expect Authentication token rather then Username/Password

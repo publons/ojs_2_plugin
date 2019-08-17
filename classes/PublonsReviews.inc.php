@@ -166,7 +166,5 @@ class PublonsReviews extends DataObject {
 	function setContent($content, $locale) {
 		return $this->setData('content', $content?$content:'', $locale);
 	}
-
 }
 
-?>

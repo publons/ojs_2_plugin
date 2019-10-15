@@ -22,7 +22,7 @@ class PublonsPlugin extends GenericPlugin {
      * @return boolean True iff plugin initialized successfully; if false,
      *  the plugin will not be registered.
      */
-    function register($category, $path) {
+    function register($category, $path, $mainContextId = null) {
 
         if (parent::register($category, $path)) {
             if ($this->getEnabled()) {
@@ -70,7 +70,7 @@ class PublonsPlugin extends GenericPlugin {
      * @see PKPPlugin::getTemplatePath()
      */
     function getTemplatePath($inCore = false) {
-        return parent::getTemplatePath() . 'templates' . DIRECTORY_SEPARATOR;
+        return 'file:/var/www/html/' . parent::getTemplatePath() . DIRECTORY_SEPARATOR;
     }
 
     /**
@@ -329,7 +329,7 @@ class PublonsPlugin extends GenericPlugin {
     /**
      * @see PKPPlugin::smartyPluginUrl()
      */
-    function smartyPluginUrl($params, &$smarty) {
+    function smartyPluginUrl($params, $smarty) {
         $path = array($this->getCategory(), $this->getName());
         if (is_array($params['path'])) {
             $params['path'] = array_merge($path, $params['path']);

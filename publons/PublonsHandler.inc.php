@@ -104,7 +104,7 @@ class PublonsHandler extends Handler {
                 $reviewId = $reviewAssignment->getId();
                 $reviewFormResponseDao =& DAORegistry::getDAO('ReviewFormResponseDAO');
                 $reviewFormElementDao =& DAORegistry::getDAO('ReviewFormElementDAO');
-                $reviewFormElements = $reviewFormElementDao->getReviewFormElements($reviewFormId);
+                $reviewFormElements = $reviewFormElementDao->getByReviewFormId($reviewFormId)->toArray();
 
                 foreach ($reviewFormElements as $reviewFormElement) if ($reviewFormElement->getIncluded()) {
 

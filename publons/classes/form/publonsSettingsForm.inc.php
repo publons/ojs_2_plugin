@@ -65,10 +65,10 @@ class PublonsSettingsForm extends Form {
      * Fetch the form.
      * @copydoc Form::fetch()
      */
-    function fetch($request, $template = NULL, $display = false) {
+    function fetch($request, $template = null, $display = false) {
         $templateMgr = TemplateManager::getManager($request);
         $templateMgr->assign('pluginName', $this->_plugin->getName());
-        return parent::fetch($request, $template = NULL, $display = false);
+        return parent::fetch($request, $template, $display);
     }
 
     /**

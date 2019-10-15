@@ -24,7 +24,7 @@ class PublonsPlugin extends GenericPlugin {
      */
     function register($category, $path, $mainContextId = null) {
 
-        if (parent::register($category, $path)) {
+        if (parent::register($category, $path, $mainContextId)) {
             if ($this->getEnabled()) {
                 $this->import('classes.PublonsReviews');
                 $this->import('classes.PublonsReviewsDAO');
@@ -52,7 +52,7 @@ class PublonsPlugin extends GenericPlugin {
     /**
      * Get the display name of this plugin
      * @return string
-     * @see PKPPlugin::getDisplayName()
+     * @see Plugin::getDisplayName()
      */
     function getDisplayName() {
         return __('plugins.generic.publons.displayName');
@@ -67,14 +67,15 @@ class PublonsPlugin extends GenericPlugin {
     }
 
     /**
-     * @see PKPPlugin::getTemplatePath()
+     * @see Plugin::getTemplatePath()
      */
     function getTemplatePath($inCore = false) {
-        return 'file:/var/www/html/' . parent::getTemplatePath() . DIRECTORY_SEPARATOR;
+        $bathPath = Core::getBaseDir();
+        return 'file:' . $bathPath . DIRECTORY_SEPARATOR . parent::getTemplatePath() . DIRECTORY_SEPARATOR;
     }
 
     /**
-     * @see PKPPlugin::getInstallSchemaFile()
+     * @see Plugin::getInstallSchemaFile()
      * @return string
      */
     function getInstallSchemaFile() {
@@ -327,7 +328,7 @@ class PublonsPlugin extends GenericPlugin {
         return function_exists('curl_version');
     }
     /**
-     * @see PKPPlugin::smartyPluginUrl()
+     * @see Plugin::smartyPluginUrl()
      */
     function smartyPluginUrl($params, $smarty) {
         $path = array($this->getCategory(), $this->getName());

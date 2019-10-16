@@ -70,6 +70,7 @@ class PublonsPlugin extends GenericPlugin {
      * @see Plugin::getTemplatePath()
      */
     function getTemplatePath($inCore = false) {
+        // return parent::getTemplatePath() . 'templates' . DIRECTORY_SEPARATOR;
         $bathPath = Core::getBaseDir();
         return 'file:' . $bathPath . DIRECTORY_SEPARATOR . parent::getTemplatePath() . DIRECTORY_SEPARATOR;
     }
@@ -208,10 +209,10 @@ class PublonsPlugin extends GenericPlugin {
 
             switch ($template) {
                 case 'reviewer/review/reviewCompleted.tpl':
-                    $templateMgr->register_outputfilter(array(&$this, 'completedSubmissionOutputFilter'));
+                    $templateMgr->registerFilter('output', array(&$this, 'completedSubmissionOutputFilter'));
                     break;
                 case 'reviewer/review/step3.tpl':
-                    $templateMgr->register_outputfilter(array(&$this, 'step3SubmissionOutputFilter'));
+                    $templateMgr->registerFilter('output', array(&$this, 'step3SubmissionOutputFilter'));
                     break;
                 default:
                     return false;
@@ -223,7 +224,7 @@ class PublonsPlugin extends GenericPlugin {
     }
 
 
-    function step3SubmissionOutputFilter($output, &$templateMgr) {
+    function step3SubmissionOutputFilter($output, $templateMgr) {
 
         $plugin =& PluginRegistry::getPlugin('generic', $this->getName());
 
@@ -258,7 +259,7 @@ class PublonsPlugin extends GenericPlugin {
 
         }
 
-        $templateMgr->unregister_outputfilter('step3SubmissionOutputFilter');
+        $templateMgr->unregisterFilter('output', 'step3SubmissionOutputFilter');
         return $output;
     }
 
@@ -268,7 +269,7 @@ class PublonsPlugin extends GenericPlugin {
      * @param $templateMgr TemplateManager
      * @return $string
      */
-    function completedSubmissionOutputFilter($output, &$templateMgr) {
+    function completedSubmissionOutputFilter($output, $templateMgr) {
         $plugin =& PluginRegistry::getPlugin('generic', $this->getName());
 
         $reviewerSubmissionDao =& DAORegistry::getDAO('ReviewerSubmissionDAO');
@@ -285,7 +286,7 @@ class PublonsPlugin extends GenericPlugin {
             $info_url = $this->getSetting($journalId, 'info_url');
 
             $templateMgr =& TemplateManager::getManager();
-            $templateMgr->unregister_outputfilter(array(&$this, 'completedSubmissionOutputFilter'));
+            $templateMgr->unregisterFilter('output', array(&$this, 'completedSubmissionOutputFilter'));
             $request = Application::getRequest();
             $router = $request->getRouter();
 

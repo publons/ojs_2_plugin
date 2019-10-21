@@ -1,4 +1,4 @@
-# OJS Publons Plugin
+# OJS 2.x Publons Plugin
 
 For OJS 3 Plugin please visit https://github.com/publons/ojs_3_plugin
 

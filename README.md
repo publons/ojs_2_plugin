@@ -1,8 +1,6 @@
 # OJS Publons Plugin
 
-Publons plugin for OJS 3.x. (The 2.x version is in the ojs-stable-2_5_0 branch.)
-
-Version: 3.1.1
+For OJS 3 Plugin please visit https://github.com/publons/ojs_3_plugin
 
 Developed and maintained by: Publons Ltd.
 
@@ -22,7 +20,7 @@ See the accompanying OJS file docs/COPYING for the complete terms of this licens
 
 ### Installation
 To install the plugin:
- - Download the plugin file `publons.tar.gz` from https://github.com/publons/ojs/releases/latest
+ - Download the plugin file `publons.tar.gz` from https://github.com/publons/ojs_2_plugin/releases
  - On your OJS site go to Settings > Website > Plugins > Upload a New Plugin,
    select the publons.tar.gz file you downloaded  and click "Save"
  - Enable the plugin by going to:  Settings > Website > Plugins > Generic Plugins and ticking "ENABLE" for the "Publons Plugin"
@@ -43,5 +41,5 @@ Please email us for support, bugfixes or comments.
 Email: <ojs@publons.com>
 
 ### Version History
-- 1.0 - Initial Release
-- 3.1.1 - Updated connection to expect Authentication token rather then Username/Password
+- 1.0.0.0 - Initial Release
+- 3.1.1.0 - Updated connection to expect Authentication token rather then Username/Password

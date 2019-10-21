@@ -138,7 +138,10 @@ class PublonsPlugin extends GenericPlugin {
                     if ($form->validate()) {
 
                         $form->execute();
-                        return new JSONMessage(true);
+                        Request::redirect(null, 'manager', 'plugin', array('generic', $this->getName(), 'select'));
+                        return false;
+                    } else {
+                        $form->display();
                     }
                 } else {
                     $form->initData();
@@ -225,6 +228,7 @@ class PublonsPlugin extends GenericPlugin {
     function step3SubmissionOutputFilter($output, &$templateMgr) {
 
         $plugin =& PluginRegistry::getPlugin('generic', $this->getName());
+        $templateMgr->unregister_outputfilter('submissionOutputFilter');
 
         $reviewerSubmissionDao =& DAORegistry::getDAO('ReviewerSubmissionDAO');
         $reviewSubmission = $templateMgr->get_template_vars('submission');
@@ -307,7 +311,6 @@ class PublonsPlugin extends GenericPlugin {
 
             $output .= $templateMgr->fetch($this->getTemplatePath() . 'publonsExportStep.tpl');
         }
-
         return $output;
     }
 

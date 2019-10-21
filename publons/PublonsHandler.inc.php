@@ -136,6 +136,10 @@ class PublonsHandler extends Handler {
             $auth_key = $plugin->getSetting($journalId, 'auth_key');
             $auth_token = $plugin->getSetting($journalId, 'auth_token');
 
+            date_default_timezone_set('UTC');
+            $dateRequested = new DateTime($reviewAssignment->getDateNotified());
+            $dateCompleted = new DateTime($reviewAssignment->getDateCompleted());
+
             $plugin->import('classes.PublonsReviews');
 
             $dateRequested = new DateTime($reviewAssignment->getDateNotified());

@@ -1,4 +1,4 @@
-# OJS Publons Plugin
+# OJS 2.x Publons Plugin
 
 For OJS 3 Plugin please visit https://github.com/publons/ojs_3_plugin
 
@@ -13,7 +13,7 @@ This plugin is licensed under the GNU General Public License v3.
 See the accompanying OJS file docs/COPYING for the complete terms of this license.
 
 ### System Requirements
-- OJS 3.1
+- OJS 2.4.5 or greater.
 - PHP 5.6 or greater.
 - CURL support for PHP.
 - ZipArchive support for PHP.
@@ -41,5 +41,9 @@ Please email us for support, bugfixes or comments.
 Email: <ojs@publons.com>
 
 ### Version History
-- 1.0.0.0 - Initial Release
-- 3.1.1.0 - Updated connection to expect Authentication token rather then Username/Password
+- 1.0 - Initial Release
+- 1.1 - Fixed small issues
+- 2.0 - Refactor of how plugin works, large bugfixes, styling changes.
+- 2.0.1 - Reviews without content will now be sent to publons
+- 2.0.2 - API token retrieval with password's that have special characters bugfix.
+- 2.5.0 - Updated connection to expect Authentication token rather then Username/Password

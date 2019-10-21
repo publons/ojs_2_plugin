@@ -1,10 +1,10 @@
 /**
- * plugins/themes/classicGreen/classicGreen.css
+ * plugins/generic/publons/styles/publons.css
  *
- * Copyright (c) 2016 Publons Ltd.
+ * Copyright (c) 2017 Publons Ltd.
  * Distributed under the GNU GPL v3.
  *
- * Publons button styling
+ * Publons styling
  *
  */
 
@@ -19,29 +19,58 @@
     padding: 0px;
 }
 
-.publons-button a,
+.publons-button,
 .publons-button span {
     display: inline-block;
     text-align: left;
-    padding: 0px 10px 0px 0px;
-    line-height: 30px;
+    padding: 0px 20px 0px 0px;
+    line-height: 40px;
     text-decoration: none;
     border-radius: 3px;
     color: #111;
     font-weight: 600;
     white-space: nowrap;
     text-overflow: ellipsis;
-    overflow: hidden;
 }
 
-.publons-button a:hover {
+.publons-button:hover {
     background-color: #aaa;
 }
 
-.publons-button a img,
+.publons-button img,
 .publons-button span img {
     float: left;
-    margin-right: 10px;
+    height: 40px;
+    width: 40px;
+    margin-right: 20px;
     border-top-left-radius: 3px;
     border-bottom-left-radius: 3px;
+}
+
+#publons-header{
+    margin-left: -16px;
+    margin-right: -16px;
+    margin-top: -16px;
+}
+
+#publons-background {
+    background-color: #222;
+    width: 100%;
+    text-align: center;
+}
+
+
+#publons-background img{
+    height: 80px;
+    margin: 10px 0px;
+}
+
+#publons-content {
+    font-size: 16px;
+    font-family: Roboto,sans-serif !important;
+}
+
+#publons-content h2{
+    font-size: 28.8px;
+    font-family: Roboto,sans-serif !important;
 }

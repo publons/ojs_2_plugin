@@ -25,16 +25,16 @@ class PublonsPlugin extends GenericPlugin {
     function register($category, $path) {
 
         if (parent::register($category, $path)) {
+            if ($this->getEnabled()) {
+                $this->import('classes.PublonsReviews');
+                $this->import('classes.PublonsReviewsDAO');
+                $publonsReviewsDao = new PublonsReviewsDAO();
+                DAORegistry::registerDAO('PublonsReviewsDAO', $publonsReviewsDao);
 
-                        if (!$this->php5Installed()) return false;
-
-            $this->import('classes.PublonsReviews');
-            $this->import('classes.PublonsReviewsDAO');
-            $publonsReviewsDao = new PublonsReviewsDAO();
-            DAORegistry::registerDAO('PublonsReviewsDAO', $publonsReviewsDao);
-
-            HookRegistry::register('TemplateManager::display', array(&$this, 'handleTemplateDisplay'));
-            HookRegistry::register ('LoadHandler', array(&$this, 'handleRequest'));
+                HookRegistry::register('TemplateManager::display', array(&$this, 'handleTemplateDisplay'));
+                HookRegistry::register('TemplateManager::fetch', array(&$this, 'handleTemplateFetch'));
+                HookRegistry::register ('LoadHandler', array(&$this, 'handleRequest'));
+            }
             return true;
         }
         return false;
@@ -57,7 +57,8 @@ class PublonsPlugin extends GenericPlugin {
     function getDisplayName() {
         return __('plugins.generic.publons.displayName');
     }
-        /**
+
+    /**
      * Get the description of this plugin
      * @return string
     */
@@ -66,18 +67,10 @@ class PublonsPlugin extends GenericPlugin {
     }
 
     /**
-     * @see PKPPlugin::getHandlerPath()
-     * @return string
-     */
-    function getHandlerPath() {
-        return $this->getPluginPath() . DIRECTORY_SEPARATOR . 'pages';
-    }
-
-    /**
      * @see PKPPlugin::getTemplatePath()
      */
-    function getTemplatePath() {
-        return parent::getTemplatePath() . 'templates/';
+    function getTemplatePath($inCore = false) {
+        return parent::getTemplatePath() . 'templates' . DIRECTORY_SEPARATOR;
     }
 
     /**
@@ -92,39 +85,58 @@ class PublonsPlugin extends GenericPlugin {
      * Get the stylesheet for this plugin.
      */
     function getStyleSheet() {
-        return $this->getPluginPath() . '/styles/publons.css';
+        return $this->getPluginPath() . DIRECTORY_SEPARATOR . 'styles' . DIRECTORY_SEPARATOR . 'publons.css';
     }
 
     /**
-     * @see GenericPlugin::getManagementVerbs()
+     * @see Plugin::getActions()
      */
-    function getManagementVerbs() {
-        $verbs = array();
-        if ($this->getEnabled()) {
-            $verbs[] = array('connect', __('plugins.generic.publons.settings.connection'));
-            $verbs[] = array('settings', __('plugins.generic.publons.settings.published'));
-        }
-        return parent::getManagementVerbs($verbs);
+    function getActions($request, $verb) {
+        $router = $request->getRouter();
+        import('lib.pkp.classes.linkAction.request.AjaxModal');
+        return array_merge(
+            $this->getEnabled()?array(
+                new LinkAction(
+                    'connect',
+                    new AjaxModal(
+                        $router->url($request, null, null, 'manage', null, array('verb' => 'connect', 'plugin' => $this->getName(), 'category' => 'generic')),
+                        $this->getDisplayName()
+                    ),
+                    __('plugins.generic.publons.settings.connection'),
+                    null
+                ),
+                // new LinkAction(
+                //     'settings',
+                //     new AjaxModal(
+                //         $router->url($request, null, null, 'manage', null, array('verb' => 'settings', 'plugin' => $this->getName(), 'category' => 'generic')),
+                //         $this->getDisplayName()
+                //     ),
+                //     __('plugins.generic.publons.settings.published'),
+                //     null
+                // ),
+            ):array(),
+            parent::getActions($request, $verb)
+        );
     }
 
     /**
      * @see GenericPlugin::manage()
      */
-    function manage($verb, $args, &$message, &$messageParams) {
-        if (!parent::manage($verb, $args, $message, $messageParams)) return false;
+    function manage($args, $request) {
 
-        $templateMgr =& TemplateManager::getManager();
-        $templateMgr->register_function('plugin_url', array(&$this, 'smartyPluginUrl'));
+        AppLocale::requireComponents(LOCALE_COMPONENT_APP_COMMON,  LOCALE_COMPONENT_PKP_MANAGER);
+        $templateMgr = TemplateManager::getManager($request);
+        $templateMgr->register_function('plugin_url', array($this, 'smartyPluginUrl'));
 
         $journal =& Request::getJournal();
-
-        switch ($verb) {
+        switch ($request->getUserVar('verb')) {
             case 'connect':
-                $this->import('classes.form.PublonsAuthForm');
-                $form = new PublonsAuthForm($this, $journal->getId());
-                if (Request::getUserVar('save')) {
+                $this->import('classes.form.publonsSettingsForm');
+                $form = new PublonsSettingsForm($this, $journal->getId());
+                if ($request->getUserVar('save')) {
                     $form->readInputData();
                     if ($form->validate()) {
+
                         $form->execute();
                         Request::redirect(null, 'manager', 'plugin', array('generic', $this->getName(), 'select'));
                         return false;
@@ -133,24 +145,39 @@ class PublonsPlugin extends GenericPlugin {
                     }
                 } else {
                     $form->initData();
-                    $form->display();
                 }
-                return true;
-            case 'settings':
-                $publonsReviewsDao =& DAORegistry::getDAO('PublonsReviewsDAO');
-                $reviewsByJournal =& $publonsReviewsDao->getPublonsReviewsByJournal($journal->getId());
+                return new JSONMessage(true, $form->fetch($request));
+            // case 'settings':
+            //     $publonsReviewsDao =& DAORegistry::getDAO('PublonsReviewsDAO');
+            //     $reviewsByJournal =& $publonsReviewsDao->getPublonsReviewsByJournal($journal->getId());
 
-                $this->import('classes.form.SettingsForm');
-                $form = new SettingsForm($this, $journal->getId());
-                    $form->initData();
-                $form->display();
-                return true;
-
-            default:
-                // Unknown management verb
-                assert(false);
-                return false;
+            //     $this->import('classes.form.SettingsForm');
+            //     $form = new SettingsForm($this, $journal->getId());
+            //         $form->initData();
+            //     $form->display();
+            //     return true;
         }
+
+        return parent::manage($args, $request);
+    }
+
+
+    function handleRequest($hookName, $params) {
+        $page =& $params[0];
+        $request = Application::getRequest();
+        AppLocale::requireComponents();
+        if ($page == 'reviewer' && $this->getEnabled()) {
+            $op =& $params[1];
+            if ($op == 'exportReview') {
+
+                define('HANDLER_CLASS', 'PublonsHandler');
+                $this->import('PublonsHandler');
+                PublonsHandler::setPlugin($this);
+                return true;
+            }
+        }
+        return false;
+
     }
 
     /**
@@ -161,32 +188,81 @@ class PublonsPlugin extends GenericPlugin {
     function handleTemplateDisplay($hookName, $args) {
         if ($this->getEnabled()) {
             $templateMgr =& $args[0];
-            $template =& $args[1];
-            if ($template != 'reviewer/submission.tpl') return false;
+            $request = PKPApplication::getRequest();
 
+            // Assign our private stylesheet, for front and back ends.
+            $templateMgr->addStyleSheet(
+                'publons',
+                $request->getBaseUrl() . '/' . $this->getStyleSheet(),
+                array(
+                    'contexts' => array('frontend', 'backend')
+                )
+            );
 
-            $templateMgr->register_outputfilter(array(&$this, 'submissionOutputFilter'));
             return false;
         }
     }
 
-    function handleRequest($hookName, $params) {
-        $page =& $params[0];
-        $request = Application::getRequest();
-        AppLocale::requireComponents(LOCALE_COMPONENT_APPLICATION_COMMON);
-        if ($page == 'reviewer' && $this->getEnabled()) {
-            $op =& $params[1];
-            if ($op == 'exportReviews') {
+    function handleTemplateFetch($hookName, $args) {
+        if ($this->getEnabled()) {
+            $templateMgr =& $args[0];
+            $template =& $args[1];
 
-                define('HANDLER_CLASS', 'PublonsHandler');
-                define('PUBLONS_PLUGIN_NAME', $this->getName());
-                AppLocale::requireComponents(LOCALE_COMPONENT_APPLICATION_COMMON);
-                $handlerFile =& $params[2];
-                $handlerFile = $this->getHandlerPath() . DIRECTORY_SEPARATOR . 'PublonsHandler.inc.php';
+            switch ($template) {
+                case 'reviewer/review/reviewCompleted.tpl':
+                    $templateMgr->register_outputfilter(array(&$this, 'completedSubmissionOutputFilter'));
+                    break;
+                case 'reviewer/review/step3.tpl':
+                    $templateMgr->register_outputfilter(array(&$this, 'step3SubmissionOutputFilter'));
+                    break;
+                default:
+                    return false;
             }
-        }
-        return false;
 
+        }
+
+        return false;
+    }
+
+
+    function step3SubmissionOutputFilter($output, &$templateMgr) {
+
+        $plugin =& PluginRegistry::getPlugin('generic', $this->getName());
+        $templateMgr->unregister_outputfilter('submissionOutputFilter');
+
+        $reviewerSubmissionDao =& DAORegistry::getDAO('ReviewerSubmissionDAO');
+        $reviewSubmission = $templateMgr->get_template_vars('submission');
+        $reviewId = $reviewSubmission->getReviewId();
+        $journalId = $reviewSubmission->getJournalId();
+        $auth_token = $plugin->getSetting($journalId, 'auth_token');
+
+
+        // Only display if the plugin has been setup
+        if ($auth_token){
+
+            preg_match_all('/<div class="section formButtons form_buttons ">/s', $output, $matches, PREG_OFFSET_CAPTURE);
+            preg_match('/id="publons-info"/s', $output, $done);
+            if (!is_null(array_values(array_slice($matches[0], -1))[0][1])){
+                $match = array_values(array_slice($matches[0], -1))[0][1];
+
+                $beforeInsertPoint = substr($output, 0, $match);
+                $afterInsertPoint = substr($output, $match - strlen($output));
+
+                $templateMgr =& TemplateManager::getManager();
+
+                $newOutput = $beforeInsertPoint;
+                if (empty($done)){
+                    $newOutput .= $templateMgr->fetch($this->getTemplatePath() . 'publonsNotificationStep.tpl');
+                }
+                $newOutput .= $afterInsertPoint;
+
+                $output = $newOutput;
+            }
+
+        }
+
+        $templateMgr->unregister_outputfilter('step3SubmissionOutputFilter');
+        return $output;
     }
 
     /**
@@ -195,57 +271,45 @@ class PublonsPlugin extends GenericPlugin {
      * @param $templateMgr TemplateManager
      * @return $string
      */
-    function submissionOutputFilter($output, &$templateMgr) {
-
+    function completedSubmissionOutputFilter($output, &$templateMgr) {
         $plugin =& PluginRegistry::getPlugin('generic', $this->getName());
-        $templateMgr->unregister_outputfilter('submissionOutputFilter');
 
         $reviewerSubmissionDao =& DAORegistry::getDAO('ReviewerSubmissionDAO');
-        $reviewId = $templateMgr->get_template_vars('reviewId');
-        $reviewSubmission = $reviewerSubmissionDao->getReviewerSubmission($reviewId);
+        $reviewSubmission = $templateMgr->get_template_vars('submission');
+        $reviewId = $reviewSubmission->getReviewId();
         $journalId = $reviewSubmission->getJournalId();
         $auth_token = $plugin->getSetting($journalId, 'auth_token');
 
+
         // Only display if the plugin has been setup
         if ($auth_token){
-            // Insert css onto review page
-            preg_match('/<\/head>/', $output, $cssMatch, PREG_OFFSET_CAPTURE);
-            if (!is_null($cssMatch[0])){
-                $beforeInsertPoint = substr($output, 0, $cssMatch[0][1]);
-                $afterInsertPoint = substr($output, $cssMatch[0][1] - strlen($output));
-                $newOutput = $beforeInsertPoint;
-                $newOutput .= '<link rel="stylesheet" href="'.Request::getBaseUrl() . '/' . $plugin->getStyleSheet().'" type="text/css">';
-                $newOutput .= $afterInsertPoint;
-                $output = $newOutput;
-            }
+            $publonsReviewsDao =& DAORegistry::getDAO('PublonsReviewsDAO');
+            $published = $publonsReviewsDao->getPublonsReviewsIdByReviewId($reviewId);
+            $info_url = $this->getSetting($journalId, 'info_url');
 
-            // Insert Publons step onto review page
-            preg_match('/id="reviewSteps".+<\/table>.{1}<\/div>(.+)/s', $output, $matches, PREG_OFFSET_CAPTURE);
-            if (!is_null($matches[1])){
+            $templateMgr =& TemplateManager::getManager();
+            $templateMgr->unregister_outputfilter(array(&$this, 'completedSubmissionOutputFilter'));
+            $request = Application::getRequest();
+            $router = $request->getRouter();
 
-                $beforeInsertPoint = substr($output, 0, $matches[1][1]);
-                $afterInsertPoint = substr($output, $matches[1][1] - strlen($output));
+            import('lib.pkp.classes.linkAction.request.AjaxModal');
+            $templateMgr->assign(
+                'exportReviewAction',
+                new LinkAction(
+                    'exportReview',
+                    new AjaxModal(
+                        $router->url($request, null, null, 'exportReview', array('reviewId' =>  $reviewId)),
+                        __('plugins.generic.publons.settings.connection')
+                    ),
+                    __('plugins.generic.publons.settings.connection'),
+                    null
+                )
+            );
+            $templateMgr->assign('reviewId', $reviewId);
+            $templateMgr->assign('published', $published);
+            $templateMgr->assign('infoURL', $info_url);
 
-                $journalId = $templateMgr->get_template_vars('submission')->getJournalId();
-
-                $eas = $templateMgr->get_template_vars()['submission']->getEditAssignments();
-
-                $publonsReviewsDao =& DAORegistry::getDAO('PublonsReviewsDAO');
-                $published =& $publonsReviewsDao->getPublonsReviewsIdByReviewId($reviewId);
-
-                $info_url = $this->getSetting($journalId, 'info_url');
-
-                $templateMgr =& TemplateManager::getManager();
-                $templateMgr->assign('reviewId', $reviewId);
-                $templateMgr->assign('published', $published);
-                $templateMgr->assign('infoURL', $info_url);
-
-                $newOutput = $beforeInsertPoint;
-                $newOutput .= $templateMgr->fetch($this->getTemplatePath() . 'publonsStep.tpl');
-                $newOutput .= $afterInsertPoint;
-
-                $output = $newOutput;
-            }
+            $output .= $templateMgr->fetch($this->getTemplatePath() . 'publonsExportStep.tpl');
         }
         return $output;
     }

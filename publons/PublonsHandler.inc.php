@@ -1,9 +1,9 @@
 <?php
 
 /**
- * @file plugins/generic/publons/pages/PublonsHandler.inc.php
+ * @file plugins/generic/publons/PublonsHandler.inc.php
  *
- * Copyright (c) 2016 Publons Ltd.
+ * Copyright (c) 2017 Publons Ltd.
  * Distributed under the GNU GPL v3.
  *
  * @class PublonsHandler
@@ -13,26 +13,35 @@
  */
 
 
-import('pages.sectionEditor.SectionEditorHandler');
 import('pages.reviewer.ReviewerHandler');
 import('classes.handler.Handler');
+import('lib.pkp.classes.core.JSONMessage');
 
 class PublonsHandler extends Handler {
+
+    /** @var PublonsPlugin The publons plugin */
+
+    static $plugin;
+
+    static function setPlugin($plugin) {
+        self::$plugin = $plugin;
+    }
 
     /**
      * Confirm you want to export the review (GET) then export it (POST)
      * @param array $args
      * @param Request $request
      */
-    function exportReviews($args, &$request) {
-
-        $plugin =& PluginRegistry::getPlugin('generic', PUBLONS_PLUGIN_NAME);
+    function exportReview($args, $request) {
+        $plugin =self::$plugin;
         $templateMgr =& TemplateManager::getManager();
-        $templateMgr->addStyleSheet(Request::getBaseUrl() . '/' . $plugin->getStyleSheet());
-        $reviewId = intval($request->getUserVar('reviewId'));
+        $templateMgr->addStyleSheet('publons-base', Request::getBaseUrl() . '/' . $plugin->getStyleSheet());
+        $templateMgr->addStyleSheet('publons-font', 'https://fonts.googleapis.com/css?family=Roboto');
+
+        $reviewId = intval($args[0]);
 
         $publonsReviewsDao =& DAORegistry::getDAO('PublonsReviewsDAO');
-        $articleCommentDao =& DAORegistry::getDAO('ArticleCommentDAO');
+        $submissionCommentDao =& DAORegistry::getDAO('SubmissionCommentDAO');
         $reviewerSubmissionDao =& DAORegistry::getDAO('ReviewerSubmissionDAO');
 
         $exported =& $publonsReviewsDao->getPublonsReviewsIdByReviewId($reviewId);
@@ -43,93 +52,84 @@ class PublonsHandler extends Handler {
 
         $user =& Request::getUser();
 
-        if ($exported)
-        {
+        if ($exported) {
             // Check that the review hasn't been exported already
             $templateMgr->assign('info', __('plugins.generic.publons.export.error.alreadyExported'));
-            $templateMgr->display($plugin->getTemplatePath() . 'export.tpl');
-            return;
-        }
-        elseif (($reviewSubmission->getRecommendation() === null) || ($reviewSubmission->getRecommendation() === ''))
-        {
+            return $templateMgr->fetchJson($plugin->getTemplatePath() . 'exportResults.tpl');
+
+        } elseif (($reviewSubmission->getRecommendation() === null) || ($reviewSubmission->getRecommendation() === '')) {
             // Check that the review has been submitted to the editor
             $templateMgr->assign('info', __('plugins.generic.publons.export.error.reviewNotSubmitted'));
-            $templateMgr->display($plugin->getTemplatePath() . 'export.tpl');
-            return;
+            return $templateMgr->fetchJson($plugin->getTemplatePath() . 'exportResults.tpl');
 
-        }
-        elseif (!$user || ($user->getId() !== $reviewerId))
-        {
+        } elseif ($user->getId() !== $reviewerId) {
             // Check that user is person who wrote review
             $templateMgr->assign('info', __('plugins.generic.publons.export.error.invalidUser'));
-            $templateMgr->display($plugin->getTemplatePath() . 'export.tpl');
-            return;
+            return $templateMgr->fetchJson($plugin->getTemplatePath() . 'exportResults.tpl');
         }
 
+        if ($request->isGet()) {
 
-
-        if ($request->isGet())
-        {
+            $router = $request->getRouter();
             $templateMgr->assign('reviewId', $reviewId);
-            $templateMgr->addStyleSheet(Request::getBaseUrl() . '/' . $plugin->getPluginPath() . '/styles/publons-page.css');
-            $templateMgr->addStyleSheet('https://fonts.googleapis.com/css?family=Roboto');
-            $templateMgr->display($plugin->getTemplatePath() . 'confirmReviewExport.tpl');
+            $templateMgr->assign('pageURL', $router->url($request, null, null, 'exportReview', array('reviewId' =>  $reviewId)));
+            return $templateMgr->fetchJson($plugin->getTemplatePath() . 'publonsExportReviewForm.tpl');
         }
         elseif ($request->isPost())
         {
             $journalId = $reviewSubmission->getJournalId();
-            $articleId = $reviewSubmission->getArticleId();
+            $submissionId = $reviewSubmission->getId();
             $rtitle = $reviewSubmission->getLocalizedTitle();
             $rtitle_en = $reviewSubmission->getTitle('en_US');
             $rname = $user->getFullName();
             $remail = $user->getEmail();
 
             $reviewAssignmentDao =& DAORegistry::getDAO('ReviewAssignmentDAO');
-            $reviewAssignment =& $reviewAssignmentDao->getReviewAssignment($reviewSubmission->getId(), $reviewerId, $reviewSubmission->getCurrentRound());
+            $reviewAssignment = $reviewAssignmentDao->getById($reviewId);
+
             $body = '';
-            if (!$reviewAssignment->getCancelled()) {
-                // Get the comments associated with this review assignment
-                $articleComments =& $articleCommentDao->getArticleComments($reviewSubmission->getId(), COMMENT_TYPE_PEER_REVIEW, $reviewAssignment->getId());
 
-                if($articleComments) {
-                    if (is_array($articleComments)) {
-                        foreach ($articleComments as $comment) {
-                            // If the comment is viewable by the author, then add the comment.
-                            if ($comment->getViewable()) $body .= String::html2text($comment->getComments()) . "\n\n";
-                        }
-                    }
+            // Get the comments associated with this review assignment
+            $submissionComments = $submissionCommentDao->getSubmissionComments($reviewSubmission->getId(), COMMENT_TYPE_PEER_REVIEW, $reviewAssignment->getId());
+
+            if($submissionComments) {
+                foreach ($submissionComments->toArray() as $comment) {
+                    // If the comment is viewable by the author, then add the comment.
+                    if ($comment->getViewable()) $body .= PKPString::html2text($comment->getComments()) . "\n";
                 }
-                if ($reviewFormId = $reviewAssignment->getReviewFormId()) {
+            }
 
-                    $reviewId = $reviewAssignment->getId();
-                    $reviewFormResponseDao =& DAORegistry::getDAO('ReviewFormResponseDAO');
-                    $reviewFormElementDao =& DAORegistry::getDAO('ReviewFormElementDAO');
-                    $reviewFormElements =& $reviewFormElementDao->getReviewFormElements($reviewFormId);
+            if ($reviewFormId = $reviewAssignment->getReviewFormId()) {
 
-                    foreach ($reviewFormElements as $reviewFormElement) if ($reviewFormElement->getIncluded()) {
+                $reviewId = $reviewAssignment->getId();
+                $reviewFormResponseDao =& DAORegistry::getDAO('ReviewFormResponseDAO');
+                $reviewFormElementDao =& DAORegistry::getDAO('ReviewFormElementDAO');
+                $reviewFormElements = $reviewFormElementDao->getReviewFormElements($reviewFormId);
 
-                        $body .= String::html2text($reviewFormElement->getLocalizedQuestion()) . ": \n";
-                        $reviewFormResponse = $reviewFormResponseDao->getReviewFormResponse($reviewId, $reviewFormElement->getId());
+                foreach ($reviewFormElements as $reviewFormElement) if ($reviewFormElement->getIncluded()) {
 
-                        if ($reviewFormResponse) {
+                    $body .= PKPString::html2text($reviewFormElement->getLocalizedQuestion()) . ": \n";
+                    $reviewFormResponse = $reviewFormResponseDao->getReviewFormResponse($reviewId, $reviewFormElement->getId());
 
-                            $possibleResponses = $reviewFormElement->getLocalizedPossibleResponses();
-                            if (in_array($reviewFormElement->getElementType(), $reviewFormElement->getMultipleResponsesElementTypes())) {
-                                if ($reviewFormElement->getElementType() == REVIEW_FORM_ELEMENT_TYPE_CHECKBOXES) {
-                                    foreach ($reviewFormResponse->getValue() as $value) {
-                                        $body .= "\t" . String::html2text($possibleResponses[$value-1]['content']) . "\n";
-                                    }
-                                } else {
-                                    $body .= "\t" . String::html2text($possibleResponses[$reviewFormResponse->getValue()-1]['content']) . "\n";
+                    if ($reviewFormResponse) {
+
+                        $possibleResponses = $reviewFormElement->getLocalizedPossibleResponses();
+                        if (in_array($reviewFormElement->getElementType(), $reviewFormElement->getMultipleResponsesElementTypes())) {
+                            if ($reviewFormElement->getElementType() == REVIEW_FORM_ELEMENT_TYPE_CHECKBOXES) {
+                                foreach ($reviewFormResponse->getValue() as $value) {
+                                    $body .= "\t" . PKPString::html2text($possibleResponses[$value-1]['content']) . "\n";
                                 }
-                                $body .= "\n";
                             } else {
-                                $body .= "\t" . $reviewFormResponse->getValue() . "\n\n";
+                                $body .= "\t" . PKPString::html2text($possibleResponses[$reviewFormResponse->getValue()-1]['content']) . "\n";
                             }
+                            $body .= "\n";
+                        } else {
+                            $body .= "\t" . $reviewFormResponse->getValue() . "\n\n";
                         }
                     }
                 }
             }
+
             $body = str_replace("\r", '', $body);
             $body = str_replace("\n", '\r\n', $body);
 
@@ -142,12 +142,15 @@ class PublonsHandler extends Handler {
 
             $plugin->import('classes.PublonsReviews');
 
+            $dateRequested = new DateTime($reviewAssignment->getDateNotified());
+            $dateCompleted = new DateTime($reviewAssignment->getDateCompleted());
+
             $locale = AppLocale::getLocale();
 
             $publonsReviews = new PublonsReviews();
 
             $publonsReviews->setJournalId($journalId);
-            $publonsReviews->setArticleId($articleId);
+            $publonsReviews->setSubmissionId($submissionId);
             $publonsReviews->setReviewerId($reviewerId);
             $publonsReviews->setReviewId($reviewId);
             $publonsReviews->setTitleEn($rtitle_en);
@@ -183,6 +186,7 @@ class PublonsHandler extends Handler {
                 $data["content"] = $body;
 
             $json_data = json_encode($data, JSON_UNESCAPED_UNICODE);
+            $json_data = str_replace("\\\\", '\\', $json_data);
 
             $templateMgr->assign('json_data',$json_data);
 
@@ -223,12 +227,8 @@ class PublonsHandler extends Handler {
 
             $templateMgr->assign('result',$returned['result']);
             $templateMgr->assign('error', $returned['error']);
-
-            $templateMgr->addStyleSheet(Request::getBaseUrl() . '/' . $plugin->getPluginPath() . '/styles/publons-page.css');
-            $templateMgr->addStyleSheet('https://fonts.googleapis.com/css?family=Roboto');
-            $templateMgr->display($plugin->getTemplatePath() . 'export.tpl');
+            return $templateMgr->fetchJson($plugin->getTemplatePath() . 'exportResults.tpl');
         }
-
 
     }
 
@@ -262,6 +262,5 @@ class PublonsHandler extends Handler {
         return function_exists('curl_version');
     }
 }
-
 
 ?>

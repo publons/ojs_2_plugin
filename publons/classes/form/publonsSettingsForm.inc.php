@@ -1,12 +1,12 @@
 <?php
 
 /**
- * @file plugins/generic/publons/classes/form/PublonsAuthForm.inc.php
+ * @file plugins/generic/publons/classes/form/PublonsSettingsForm.inc.php
  *
- * Copyright (c) 2016 Publons Ltd.
+ * Copyright (c) 2017 Publons Ltd.
  * Distributed under the GNU GPL v3.
  *
- * @class PublonsAuthForm
+ * @class PublonsSettingsForm
  * @ingroup plugins_generic_publons
  *
  * @brief Plugin settings: connect to a Publons Network
@@ -15,7 +15,7 @@
 import('lib.pkp.classes.form.Form');
 import('plugins.generic.publons.classes.PublonsHelpURLFormValidator');
 
-class PublonsAuthForm extends Form {
+class PublonsSettingsForm extends Form {
 
     /** @var $_plugin PublonsPlugin */
     var $_plugin;
@@ -29,7 +29,7 @@ class PublonsAuthForm extends Form {
      * @param $journalId int
      * @see Form::Form()
      */
-    function PublonsAuthForm(&$plugin, $journalId) {
+    function PublonsSettingsForm(&$plugin, $journalId) {
         $this->_plugin =& $plugin;
         $this->_journalId = $journalId;
 
@@ -38,6 +38,7 @@ class PublonsAuthForm extends Form {
         $this->addCheck(new FormValidator($this, 'auth_key', FORM_VALIDATOR_REQUIRED_VALUE, 'plugins.generic.publons.settings.journalTokenRequired'));
         $this->addCheck(new FormValidator($this, 'info_url', FORM_VALIDATOR_OPTIONAL_VALUE, 'plugins.generic.publons.settings.invalidHelpUrl', new PublonsHelpURLFormValidator()));
         $this->addCheck(new FormValidatorPost($this));
+        $this->addCheck(new FormValidatorCSRF($this));
     }
 
     /**
@@ -45,6 +46,7 @@ class PublonsAuthForm extends Form {
      */
     function initData() {
         $plugin =& $this->_plugin;
+        $journalId = $this->_journalId;
 
         // Initialize from plugin settings
         $this->setData('auth_key', $plugin->getSetting($this->_journalId, 'auth_key'));
@@ -54,9 +56,22 @@ class PublonsAuthForm extends Form {
 
     /**
      * @see Form::readInputData()
+     * Reads the input data - uses the username and password to get the private
+     * access token for sending reviews to publons. The username and password
+     * are not saved.
      */
     function readInputData() {
         $this->readUserVars(array('auth_token', 'auth_key', 'info_url'));
+    }
+
+    /**
+     * Fetch the form.
+     * @copydoc Form::fetch()
+     */
+    function fetch($request) {
+        $templateMgr = TemplateManager::getManager($request);
+        $templateMgr->assign('pluginName', $this->_plugin->getName());
+        return parent::fetch($request);
     }
 
     /**
@@ -68,6 +83,11 @@ class PublonsAuthForm extends Form {
         $plugin->updateSetting($this->_journalId, 'auth_token', $this->getData('auth_token') , 'string');
         $plugin->updateSetting($this->_journalId, 'auth_key', $this->getData('auth_key'), 'string');
         $plugin->updateSetting($this->_journalId, 'info_url', $this->getData('info_url'), 'string');
+
+        $request = PKPApplication::getRequest();
+        $currentUser = $request->getUser();
+        $notificationMgr = new NotificationManager();
+        $notificationMgr->createTrivialNotification($currentUser->getId(), NOTIFICATION_TYPE_SUCCESS, array('contents' => __('plugins.generic.publons.notifications.settingsUpdated')));
     }
 
 }

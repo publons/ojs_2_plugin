@@ -4,7 +4,7 @@
 <!--
   * plugins/generic/publons/locale/ru_RU/locale.xml
   *
-  * Copyright (c) 2016 Publons Ltd.
+  * Copyright (c) 2017 Publons Ltd.
   * Distributed under the GNU GPL v3.
   *
   * Localization strings for the ru_RU (Russian) locale.
@@ -12,6 +12,10 @@
   -->
 
 <locale name="ru_RU" full_name="Russian">
+
+  <message key="user.password">Пароль</message>
+  <message key="user.email">Адрес (E-mail)</message>
+
   <message key="plugins.generic.publons.displayName">Publons Плагин</message>
   <message key="plugins.generic.publons.description">Данный плагин позволяет добавлять рецензии к профилю рецензента на Publons.</message>
   <message key="plugins.generic.publons.list">Список рецензий отправленных Publons</message>
@@ -23,6 +27,7 @@
   <message key="plugins.generic.publons.button.publishedReview">Эта рецензия уже отправлена Publons</message>
   <message key="plugins.generic.publons.button.completeReview">Вы должны закончить свою рецензию прежде чем отправлять её Publons</message>
 
+  <message key="plugins.generic.publons.notifications.settingsUpdated">настройки обновлены</message>
 
   <message key="plugins.generic.publons.settings.published">Отправленные Рецензии</message>
   <message key="plugins.generic.publons.settings.connection">Настройки</message>

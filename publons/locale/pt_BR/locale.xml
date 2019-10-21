@@ -4,7 +4,7 @@
 <!--
   * plugins/generic/publons/locale/pt_BR/locale.xml
   *
-  * Copyright (c) 2016 Publons Ltd.
+  * Copyright (c) 2017 Publons Ltd.
   * Distributed under the GNU GPL v3.
   *
   * Localization strings for the pt_BR (Brazilian Portuguese) locale
@@ -12,6 +12,10 @@
   -->
 
 <locale name="pt_BR" full_name="Brazilian Portuguese">
+
+  <message key="user.password">Senha</message>
+  <message key="user.email">E-mail</message>
+
   <message key="plugins.generic.publons.displayName">Publons Plugin</message>
   <message key="plugins.generic.publons.description">Este plugin permite que você publique suas avaliações no Publons.</message>
   <message key="plugins.generic.publons.list">Lista de avaliações enviadas para Publons</message>
@@ -23,6 +27,7 @@
   <message key="plugins.generic.publons.button.publishedReview">Essa avaliação já foi publicada no Publons</message>
   <message key="plugins.generic.publons.button.completeReview">Você deve submeter o seu parecer antes de exportar ele para Publons</message>
 
+  <message key="plugins.generic.publons.notifications.settingsUpdated">Configurações atualizadas</message>
 
   <message key="plugins.generic.publons.settings.published">Avaliações enviadas</message>
   <message key="plugins.generic.publons.settings.connection">Conexão</message>

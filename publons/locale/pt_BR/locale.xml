@@ -20,10 +20,10 @@
   <message key="plugins.generic.publons.description">Este plugin permite que você publique suas avaliações no Publons.</message>
   <message key="plugins.generic.publons.list">Lista de avaliações enviadas para Publons</message>
 
-  <message key="plugins.generic.publons.review.addReviewtoPublons">Exportar meu parecer para Publons</message>
   <message key="plugins.generic.publons.review.publonsStepInstructions">Certifique e obtenha reconhecimento pelo seu parecer ao exportar ele para Publons.</message>
   <message key="plugins.generic.publons.review.urlHelp">Para mais informações sobre isso, acesse:</message>
 
+  <message key="plugins.generic.publons.button.submitExportReview">Exportar meu parecer para Publons</message>
   <message key="plugins.generic.publons.button.publishedReview">Essa avaliação já foi publicada no Publons</message>
   <message key="plugins.generic.publons.button.completeReview">Você deve submeter o seu parecer antes de exportar ele para Publons</message>
 
@@ -35,16 +35,15 @@
   <message key="plugins.generic.publons.settings.publishedTable.date.added">Data da adição</message>
   <message key="plugins.generic.publons.settings.publishedTable.review">Parecer</message>
   <message key="plugins.generic.publons.settings.publishedTable.noReviews">Nenhum parecer foi exportado para Publons</message>
-  <message key="plugins.generic.publons.settings.invalidHelpUrl">Por favor, inicie a url com https://</message>
-  <message key="plugins.generic.publons.settings.auth_tokenLabel">Authorization Token</message>
+  <message key="plugins.generic.publons.settings.journalTokenRequired">Por favor, insira o API key correto para sua integração com Publons.</message>
+  <message key="plugins.generic.publons.settings.invalidHelpUrl">Por favor, inicie a url com https://publons.com</message>
+  <message key="plugins.generic.publons.settings.authTokenRequired">Please ensure that your Authorization token is correct.</message>
+  <message key="plugins.generic.publons.settings.auth_tokenDescription">The Authorization token for the specified account (you can find that on https://publons.com/api/v2/ under Token).</message>
   <message key="plugins.generic.publons.settings.urlDescription">A URL da página de recepção do periódico no Publons.</message>
   <message key="plugins.generic.publons.settings.url">URL</message>
-  <message key="plugins.generic.publons.settings.auth_tokenRequired">Insira o token de autorização correto (Você pode encontrá-lo em https://publons.com/api/v2/ na seção Token).</message>
-  <message key="plugins.generic.publons.settings.journalTokenRequired">Insira o journal token para integração com Publons.</message>
-  <message key="plugins.generic.publons.settings.auth_token">Token de Autorização</message>
-  <message key="plugins.generic.publons.settings.auth_tokenDescription">O Token de autorização para sua conta Publons (Você pode encontrá-lo em https://publons.com/api/v2/ na seção Token).</message>
-  <message key="plugins.generic.publons.settings.journalToken">Journal token</message>
-  <message key="plugins.generic.publons.settings.journalTokenDescription">O Journal Token usado para exportar suas revisões/avaliações para sua conta Publons</message>
+  <message key="plugins.generic.publons.settings.journalToken">API Key</message>
+  <message key="plugins.generic.publons.settings.auth_token">Authorization Token</message>
+  <message key="plugins.generic.publons.settings.journalTokenDescription">O código API do periódico utilizado para exportar avaliações para Publons</message>
 
 
   <message key="plugins.generic.publons.confirmation.title">Enviar seu parecer para Publons</message>
@@ -78,18 +77,30 @@
 
   <message key="plugins.generic.publons.settings.info">
     <![CDATA[
-      <p>Para que seus revisores tenham a oportunidade de serem reconhecidos por revisões na Publons, por favor se registre clicando neste <a href="http://publons.com/partner/info">link</a> ou enviando um <a href="mailto:partnerships@publons.com">email para nós da Publons</a>. A seguir, enviaremos instruções para ter acesso ao painel de controle dos nossos parceiros e como configurá-lo para seu caso.</p>
-      <p>Para habilitar o plugin Publons Reviewer Recognition plugin preencha os campos abaixo:</p>
+      <p> Para possibilitar que os seus avaliadores obtenham reconhecimento no Publons pelas avaliações realizada, por favor registre
+seu interesse com Publons em <a href="http://publons.com/partner/info">link</a> ou
+        por <a href="mailto:partnerships@publons.com">emailing Publons</a>. Você receberá acesso ao painel de parceiros com informações necessárias para completar a configuração da integração nas Instruções disponíveis.
+      </p>
+      <p>
+        Para ativar o plugin, preencha os dados abaixo
+      </p>
     ]]>
   </message>
 
   <message key="plugins.generic.publons.settings.ps">
     <![CDATA[
-      <p>Uma vez que você tenha ativado o plugin, a opção dos seus revisores receber reconhecimento pelas revisões feitas irá aparecer na página de submissão da revisão.</p>
-      <p>Se o revisor optou por receber o reconhecimento pela revisão, depois da submissão, os dados serão enviados de maneira segura para Publons e o revisor irá receber um email (no endereço registrado na revista publicadora) contendo um link para afirmar o reconhecimento.</p>
-      <p>Quando os revisores clicam no link para afirmar serem os revisores, serão redirecionados para entrar ou registrar com uma conta Publons e a revisão será adicionada a ela. Revisores pode selecionar a opção "Automatically add reviews from partnered journals" nas configurações de conta para pular este passo.</p>
-      <p>Por padrão, Publons não publica o conteúdo das revisões. No entanto, se a revista e o revisor permitirem, Publons irá publicar o conteúdo da revisão depois que o artigo tiver sido publicado. </p>
-      <p>A aba 'Exported Reviews' no painel de controle Publons mostra as revisões adicionadas.</p>
+      <p>
+        Depois de ativar o plugin, a opção de enviar as avaliações ficará disponível aos revisores na página com os dados da submissão.</p><p> Se o avaliador optar por receber o crédito pela avaliação, a informação será seguramente enviada para Publons, e o avaliador receberá um email de Publons (para o endereço registrado na revista) com um link para reconhecer a avaliação.
+      </p>
+      <p>
+        Depois de acessar esse link, o revisor deverá entrar em seu perfil Publons e a avaliação será adicionada na sua conta. Os avaliadores podem selecionar "Automatically add reviews from partnered journals" nas configurações do perfil em Publons para pular esta etapa de solicitação.
+      </p>
+      <p>
+       Como opção padrão, Publons não publica o conteúdo da avaliação. Contudo, se tanto a revista como o avaliador autorizarem, Publons irá disponibilizar o texto assim que o artigo for publicado.
+      </p>
+      <p>
+        A aba 'Exported Reviews' irá mostrar a lista de avaliações exportadas para Publons.
+      </p>
     ]]>
   </message>
 

@@ -33,8 +33,8 @@ class PublonsSettingsForm extends Form {
         $this->_plugin =& $plugin;
         $this->_journalId = $journalId;
 
-        parent::Form($plugin->getTemplatePath() . 'publonsAuthForm.tpl');
-        $this->addCheck(new FormValidator($this, 'auth_token', FORM_VALIDATOR_REQUIRED_VALUE, 'plugins.generic.publons.settings.auth_tokenRequired'));
+        parent::__construct($plugin->getTemplatePath() . 'publonsSettingsForm.tpl');
+        $this->addCheck(new FormValidator($this, 'auth_token', FORM_VALIDATOR_REQUIRED_VALUE, 'plugins.generic.publons.settings.authTokenRequired'));
         $this->addCheck(new FormValidator($this, 'auth_key', FORM_VALIDATOR_REQUIRED_VALUE, 'plugins.generic.publons.settings.journalTokenRequired'));
         $this->addCheck(new FormValidator($this, 'info_url', FORM_VALIDATOR_OPTIONAL_VALUE, 'plugins.generic.publons.settings.invalidHelpUrl', new PublonsHelpURLFormValidator()));
         $this->addCheck(new FormValidatorPost($this));
@@ -49,16 +49,13 @@ class PublonsSettingsForm extends Form {
         $journalId = $this->_journalId;
 
         // Initialize from plugin settings
-        $this->setData('auth_key', $plugin->getSetting($this->_journalId, 'auth_key'));
-        $this->setData('auth_token', $plugin->getSetting($this->_journalId, 'auth_token'));
-        $this->setData('info_url', $plugin->getSetting($this->_journalId, 'info_url'));
+        $this->setData('auth_token', $plugin->getSetting($journalId, 'auth_token'));
+        $this->setData('auth_key', $plugin->getSetting($journalId, 'auth_key'));
+        $this->setData('info_url', $plugin->getSetting($journalId, 'info_url'));
     }
 
     /**
      * @see Form::readInputData()
-     * Reads the input data - uses the username and password to get the private
-     * access token for sending reviews to publons. The username and password
-     * are not saved.
      */
     function readInputData() {
         $this->readUserVars(array('auth_token', 'auth_key', 'info_url'));
@@ -68,10 +65,10 @@ class PublonsSettingsForm extends Form {
      * Fetch the form.
      * @copydoc Form::fetch()
      */
-    function fetch($request) {
+    function fetch($request, $template = null, $display = false) {
         $templateMgr = TemplateManager::getManager($request);
         $templateMgr->assign('pluginName', $this->_plugin->getName());
-        return parent::fetch($request);
+        return parent::fetch($request, $template, $display);
     }
 
     /**
@@ -79,7 +76,6 @@ class PublonsSettingsForm extends Form {
      */
     function execute() {
         $plugin =& $this->_plugin;
-
         $plugin->updateSetting($this->_journalId, 'auth_token', $this->getData('auth_token') , 'string');
         $plugin->updateSetting($this->_journalId, 'auth_key', $this->getData('auth_key'), 'string');
         $plugin->updateSetting($this->_journalId, 'info_url', $this->getData('info_url'), 'string');
@@ -90,4 +86,6 @@ class PublonsSettingsForm extends Form {
         $notificationMgr->createTrivialNotification($currentUser->getId(), NOTIFICATION_TYPE_SUCCESS, array('contents' => __('plugins.generic.publons.notifications.settingsUpdated')));
     }
 
+
 }
+?>

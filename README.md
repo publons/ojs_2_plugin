@@ -1,7 +1,5 @@
 # OJS 2.x Publons Plugin
 
-For OJS 3 Plugin please visit https://github.com/publons/ojs_3_plugin
-
 Developed and maintained by: Publons Ltd.
 
 ### About
@@ -47,3 +45,5 @@ Email: <ojs@publons.com>
 - 2.0.1 - Reviews without content will now be sent to publons
 - 2.0.2 - API token retrieval with password's that have special characters bugfix.
 - 2.5.0 - Updated connection to expect Authentication token rather then Username/Password
+
+For OJS 3 Plugin please visit https://github.com/publons/ojs_3_plugin

@@ -3,7 +3,7 @@
 Developed and maintained by: Publons Ltd.
 
 ### About
-This plugin provides the ability to send and publish reviews to Publons (https://publons.com).
+This plugin provides the ability to send and publish reviews to Web of Science Researcher Profiles (formerly known as Publons, https://webofscience.com).
 
 ### License
 This plugin is licensed under the GNU General Public License v3.
@@ -35,7 +35,7 @@ The Publons website certifies only the fact the reviewer has completed peer revi
 
 ### Contact
 For enquiries regarding usage, support, bugfixes, or comments please email:
-partners@publons.com
+reviewservices@clarivate.com
 
 ### OJS 3 compatibility 
 For an OJS 3 compatible version of the plugin please visit:
